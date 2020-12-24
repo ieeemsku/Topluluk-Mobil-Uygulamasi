@@ -1,1 +1,1 @@
-# Topluluk-Mobil-Uygulamas-
+# Topluluk-Mobil-Uygulaması-

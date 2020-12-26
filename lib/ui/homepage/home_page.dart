@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                         child: Row(
                           children: <Widget>[
                             Text(
-                              "STUVENT ETKİNLİK HABERCİSİ",
+                              "STUVENT TOPLULUK UYGULAMASI",
                               style: fadedTextStyle,
                             ),
                             Spacer(),

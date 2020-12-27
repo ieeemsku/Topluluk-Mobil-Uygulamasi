@@ -34,7 +34,6 @@ dependencies:
   flutter_local_notifications: 1.4.4
   http: 0.12.2
   rxdart: 0.24.1
-  fancy_on_boarding: ^1.7.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -71,7 +70,6 @@ flutter:
     - assets/loading.gif
     - assets/icon.png
     - images/
-    - assets/png/
   # - assets/guest_images/
 
   # An image asset can refer to one or more resolution-specific "variants", see

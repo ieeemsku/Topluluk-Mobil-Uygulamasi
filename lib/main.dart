@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:stuventmobil/app/landing_page.dart';
 import 'package:stuventmobil/locator.dart';
@@ -10,9 +9,6 @@ Future<void> main() async {
   setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Color(0xFFFF4700),
-  ));
   runApp(MyApp());
 }
 

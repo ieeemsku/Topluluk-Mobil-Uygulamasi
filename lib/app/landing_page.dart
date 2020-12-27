@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuventmobil/common_widget/merkez_widget.dart';
-import 'package:stuventmobil/ui/Login/login.dart';
 import "package:stuventmobil/ui/homepage/home_page.dart";
+import 'package:stuventmobil/ui/intro/intro.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
 class LandingPage extends StatelessWidget {
@@ -13,7 +13,7 @@ class LandingPage extends StatelessWidget {
             true); // "listen" default olarak "true " kabul edildigi icin bunu yazmaya da bilisiniz
     if (_userModel.state == ViewState.Idle) {
       if (_userModel.user == null) {
-        return Login();
+        return Intro();
       } else {
         return HomePage();
       }

@@ -21,7 +21,7 @@ class _IntroState extends State<Intro> {
   final pageList = [
     PageModel(
         color: color,
-        heroImagePath: path + 'CS_420x.png',
+        heroAssetPath: path + 'CS_420x.png',
         title: Text("Computer Society", style: titleTextStyle),
         body: Text(
             "IEEE Computer Society genelini bilgisayar/bilişim mühendislerinin "
@@ -30,10 +30,10 @@ class _IntroState extends State<Intro> {
             "teknik kuruluşudur.",
             textAlign: TextAlign.center,
             style: bodyTextStyle),
-        iconImagePath: path + 'CS_90x.png'),
+        iconAssetPath: path + 'CS_90x.png'),
     PageModel(
         color: color,
-        heroImagePath: path + 'EA_420x.png',
+        heroAssetPath: path + 'EA_420x.png',
         title: Text("Educational Activities", style: titleTextStyle),
         body: Text(
             "Daha öncesinde Sosyal Sorumluluk Projesi (SSP) olarak bilinen ve "
@@ -42,7 +42,7 @@ class _IntroState extends State<Intro> {
             "kararı alınmış bir IEEE komitesidir.",
             textAlign: TextAlign.center,
             style: bodyTextStyle),
-        iconImagePath: path + 'EA_90x.png'),
+        iconAssetPath: path + 'EA_90x.png'),
   ];
   @override
   Widget build(BuildContext context) {
@@ -53,11 +53,11 @@ class _IntroState extends State<Intro> {
         pageList: pageList,
         onDoneButtonPressed: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Login()),
+          MaterialPageRoute(builder: (context) => LoginPage()),
         ),
         onSkipButtonPressed: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Login()),
+          MaterialPageRoute(builder: (context) => LoginPage()),
         ),
       ),
     );

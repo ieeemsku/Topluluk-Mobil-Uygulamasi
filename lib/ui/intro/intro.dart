@@ -43,6 +43,50 @@ class _IntroState extends State<Intro> {
             textAlign: TextAlign.center,
             style: bodyTextStyle),
         iconAssetPath: path + 'EA_90x.png'),
+    PageModel(
+        color: color,
+        heroAssetPath: path + 'CSoc_420x.png',
+        title: Text(
+          "Communications Society",
+          style: titleTextStyle,
+          textAlign: TextAlign.center,
+        ),
+        body: Text(
+            "IEEE Communications Society (ComSoc) Dünya çapında geliştirilen mühendislik metodolojisini "
+            "haberleşme teknolojisine uygulayan, bu amaçla insan yaşam kalitesini arttırmaya yönelik; mesleki "
+            "gelişimi sağlama, mesleğe teşviki arttırmayı ilke edinmiş telekomünikasyon mühendisleri topluluğudur.",
+            textAlign: TextAlign.center,
+            style: bodyTextStyle),
+        iconAssetPath: path + 'CSoc_90x.png'),
+    PageModel(
+        color: color,
+        heroAssetPath: path + 'PES_420x.png',
+        title: Text(
+          "Power And Energy Society",
+          style: titleTextStyle,
+          textAlign: TextAlign.center,
+        ),
+        body: Text(
+            "Power and Energy Society(PES) yani Güç ve Enerji Topluluğu,IEEE‘nin bünyesinde barındırdığı "
+            "39 topluluk arasında en eski olanlarından biridir. Temel olarak uğraştığı sektör enerji sektörüdür. "
+            "Enerjiyi mümkün olduğu kadar çevreci, verimli, olabilecek en yüksek faydada, hayati tehlike taşımadan,"
+            "plan yapan ve çalışan bir topluluktur.",
+            textAlign: TextAlign.center,
+            style: bodyTextStyle),
+        iconAssetPath: path + 'PES_90x.png'),
+    PageModel(
+        color: color,
+        heroAssetPath: path + 'WIE _420x.png',
+        title: Text("Women in Engineering", style: titleTextStyle),
+        body: Text(
+            " WIE, IEEE’nin diğer komitelerinden farklı olarak bir farkındalık komitesidir. IEEE WIE, "
+            "kadınların da kendi istedikleri meslekleri seçmesi ve bu mesleklerde kendilerini daha iyi ifade "
+            "etmeleri için farkındalık çalışmalarını yürütüyor. Özellikle kadınların da mühendislik, bilim, "
+            "kariyer ve yönetim alanlarında en az erkekler kadar sektörün içinde ve onlar kadar söz sahibi "
+            "olmasını sağlamaya çalışıyor.",
+            textAlign: TextAlign.center,
+            style: bodyTextStyle),
+        iconAssetPath: path + 'WIE_90.png')
   ];
   @override
   Widget build(BuildContext context) {

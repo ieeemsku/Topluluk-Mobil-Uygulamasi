@@ -65,17 +65,14 @@ class _HomePageState extends State<HomePage>
               //   screenHide: ekranYuksekligi,
               // ),
               AnimatedPositioned(
-                top: menuAcikMi ? 0.2 * ekranYuksekligi : 0,
-                bottom: menuAcikMi ? 0.2 * ekranYuksekligi : 0,
+                top: menuAcikMi ? 0.1 * ekranYuksekligi : 0,
+                bottom: menuAcikMi ? 0.1 * ekranYuksekligi : 0,
                 left: menuAcikMi ? 0.5 * width : 0,
                 right: menuAcikMi ? -0.4 * width : 0,
                 duration: _duration,
                 child: RefreshIndicator(
                   onRefresh: read,
                   child: Material(
-                    borderRadius: menuAcikMi
-                        ? BorderRadius.all(Radius.circular(50))
-                        : null,
                     elevation: 8,
                     color: color,
                     child: SingleChildScrollView(
@@ -147,39 +144,33 @@ class _HomePageState extends State<HomePage>
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: menuAcikMi
-                                ? Container(
-                                    width: width,
-                                    height: ekranYuksekligi,
-                                  )
-                                : FutureBuilder<void>(
-                                    future: read(),
-                                    builder: (context, sonuc) =>
-                                        Consumer<AppState>(
-                                      builder: (context, appState, _) => Column(
-                                        children: <Widget>[
-                                          for (final event in events)
-                                            if (event.categoryIds.contains(
-                                                appState.selectedCategoryId))
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            EventDetailsPage(
-                                                          event: event,
-                                                        ),
-                                                      ));
-                                                },
-                                                child: EventWidget(
-                                                  event: event,
-                                                ),
-                                              )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                            child: FutureBuilder<void>(
+                              future: read(),
+                              builder: (context, sonuc) => Consumer<AppState>(
+                                builder: (context, appState, _) => Column(
+                                  children: <Widget>[
+                                    for (final event in events)
+                                      if (event.categoryIds.contains(
+                                          appState.selectedCategoryId))
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EventDetailsPage(
+                                                    event: event,
+                                                  ),
+                                                ));
+                                          },
+                                          child: EventWidget(
+                                            event: event,
+                                          ),
+                                        )
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),

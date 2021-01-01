@@ -1,8 +1,6 @@
 import 'package:fancy_on_boarding/fancy_on_boarding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:stuventmobil/viewmodel/user_model.dart';
 
 class Intro extends StatefulWidget {
   @override
@@ -92,7 +90,24 @@ class _IntroState extends State<Intro> {
             "olmasını sağlamaya çalışıyor.",
             textAlign: TextAlign.center,
             style: bodyTextStyle),
-        iconAssetPath: path + 'WIE_90.png')
+        iconAssetPath: path + 'WIE_90.png'),
+    PageModel(
+        color: color,
+        heroAssetPath: path + 'RAS_420x.png',
+        title: Text(
+          "Robotics & Automation Society",
+          style: titleTextStyle,
+          textAlign: TextAlign.center,
+        ),
+        body: Text(
+            "IEEE Robotics and Automation Society amaçları bilimsel, edebi ve "
+            "eğitsel niteliktedir. Bizler, robotik ve otomasyon mühendisliği ve bilimi,"
+            " müttefik sanatlar, bilimler teorisi ve pratiğinin ilerletilmesi ve "
+            "üyeleri arasındaki yüksek mesleki standartların IEEE Anayasası ve Tüzüğü "
+            "ile uyumlu olarak sürdürülmesi için çaba göstermekteyiz.",
+            textAlign: TextAlign.center,
+            style: bodyTextStyle),
+        iconAssetPath: path + 'RAS_90.png')
   ];
   @override
   Widget build(BuildContext context) {
@@ -102,12 +117,10 @@ class _IntroState extends State<Intro> {
         skipButtonText: "Geç",
         pageList: pageList,
         onDoneButtonPressed: () {
-          final _usermodel = Provider.of<UserModel>(context, listen: false);
-          _usermodel.intro = true;
+          Navigator.pop(context);
         },
         onSkipButtonPressed: () {
-          final _usermodel = Provider.of<UserModel>(context, listen: false);
-          _usermodel.intro = true;
+          Navigator.pop(context);
         },
       ),
     );

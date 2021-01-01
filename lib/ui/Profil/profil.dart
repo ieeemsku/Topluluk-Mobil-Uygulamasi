@@ -86,7 +86,7 @@ class _ProfilState extends State<Profil> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => UpdatePasswordPage()));
+                            builder: (context) => ChangePassword()));
                   },
                   color: Colors.pink,
                 ),
@@ -102,7 +102,7 @@ class _ProfilState extends State<Profil> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => GeneratEvent()),
+                        MaterialPageRoute(builder: (context) => Create_Event()),
                       );
                     },
                     color: Colors.green,
@@ -119,8 +119,7 @@ class _ProfilState extends State<Profil> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => GenerateNotification()),
+                        MaterialPageRoute(builder: (context) => Notice()),
                       );
                     },
                     color: Colors.blue,

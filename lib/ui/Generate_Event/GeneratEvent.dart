@@ -1,5 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
+import 'package:stuventmobil/viewmodel/user_model.dart';
 
 import '../const.dart';
 
@@ -14,27 +20,38 @@ class Create_Event extends StatefulWidget {
 }
 
 class _Create_EventState extends State<Create_Event> {
-  @override
   Size size;
+
+  List<String> etkinlikler = [];
+
+  String event_name, location, url;
+
+  int category;
+
+  File _secilenResim;
+
+  bool _eventInProgress = false;
 
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
+    UserModel _userModel = Provider.of<UserModel>(context);
     return Expanded(
-          child: Scaffold(
+      child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
           body: Column(
             children: [
               Theme(
                   data: ThemeData(primaryColor: new_event_color),
-                  child: buildingHeaderAndTextForm(context)),
-              buildingBack(context)
+                  child: buildingHeaderAndTextForm(context, _userModel)),
+              buildingBack(context, _userModel)
             ],
           )),
     );
   }
 
-  Widget buildingHeaderAndTextForm(context) {
+  Widget buildingHeaderAndTextForm(context, UserModel userModel) {
+    getEtkinlikler(userModel);
     return Container(
       height: size.height * 0.8,
       child: Stack(
@@ -96,7 +113,7 @@ class _Create_EventState extends State<Create_Event> {
                         TextFormField(
                           style: TextStyle(color: Colors.grey),
                           decoration: InputDecoration(
-                            prefixIcon: Icon(CupertinoIcons.bubble_right,
+                            prefixIcon: Icon(CupertinoIcons.conversation_bubble,
                                 color: new_event_color),
                             hintStyle: TextStyle(
                                 fontFamily: "Catamaran",
@@ -106,6 +123,13 @@ class _Create_EventState extends State<Create_Event> {
                             hintText: "Etkinlik",
                           ),
                           key: Create_Event.key1,
+                          validator: (String value) {
+                            if (etkinlikler.contains(value)) {
+                              return "Bu etkinlik bulunmaktadır";
+                            } else
+                              return null;
+                          },
+                          onSaved: (String value) => event_name = value,
                         ),
                         SizedBox(height: size.height * 0.03),
                         TextFormField(
@@ -114,7 +138,7 @@ class _Create_EventState extends State<Create_Event> {
                           decoration: InputDecoration(
                             hintText: "Etkinliğin Konumu",
                             prefixIcon: Icon(
-                              CupertinoIcons.map,
+                              Icons.map,
                               color: new_event_color,
                             ),
                             hintStyle: TextStyle(
@@ -123,6 +147,7 @@ class _Create_EventState extends State<Create_Event> {
                                 color: Colors.grey,
                                 fontSize: 17),
                           ),
+                          onSaved: (String value) => location = value,
                         ),
                         SizedBox(
                           height: size.height * 0.03,
@@ -138,13 +163,18 @@ class _Create_EventState extends State<Create_Event> {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(color: new_event_color)),
-                            child: Center(
-                                child: Text(
-                              "Resim Yok",
-                              style: TextStyle(
-                                  color: Colors.grey.shade600,
-                                  fontWeight: FontWeight.bold),
-                            )),
+                            child: GestureDetector(
+                              child: Center(
+                                  child: _secilenResim == null
+                                      ? Text(
+                                          "Resim Yok",
+                                          style: TextStyle(
+                                              color: Colors.grey.shade600,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      : Image.file(_secilenResim)),
+                              onTap: _galeriResimUpload,
+                            ),
                           ),
                         ),
                       ]),
@@ -155,28 +185,32 @@ class _Create_EventState extends State<Create_Event> {
           Positioned(
               top: size.height * 0.78,
               left: size.width * 0.333,
-              child: Container(
-                child: Center(
-                    child: Text(
-                  "Resim Ekle",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                )),
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                  begin: Alignment.bottomRight,
-                  end: Alignment.bottomLeft,
-                  stops: [
-                    0.1,
-                    1.0,
-                  ],
-                  colors: [
-                    Color.fromRGBO(30, 227, 167, 1),
-                    Color.fromRGBO(220, 247, 239, 1),
-                  ]),
-                    borderRadius: butonBorder),
-                height: size.height * 0.09,
-                width: size.width * 0.3,
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                child: Container(
+                  child: Center(
+                      child: Text(
+                    "Resim Ekle",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  )),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.bottomRight,
+                          end: Alignment.bottomLeft,
+                          stops: [
+                            0.1,
+                            1.0,
+                          ],
+                          colors: [
+                            Color.fromRGBO(30, 227, 167, 1),
+                            Color.fromRGBO(220, 247, 239, 1),
+                          ]),
+                      borderRadius: butonBorder),
+                  height: size.height * 0.09,
+                  width: size.width * 0.3,
+                ),
+                onTap: _galeriResimUpload,
               ))
         ],
         overflow: Overflow.visible,
@@ -184,63 +218,78 @@ class _Create_EventState extends State<Create_Event> {
     );
   }
 
-  Widget buildingBack(context) {
+  Widget buildingBack(context, UserModel userModel) {
     return Padding(
       padding: EdgeInsets.only(
           left: MediaQuery.of(context).size.width * 0.1,
           top: MediaQuery.of(context).size.width * 0.08),
       child: Row(
         children: [
-          Icon(
-            Icons.arrow_back_ios,
-            color: new_event_color,
-            size: 30,
+          GestureDetector(
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: new_event_color,
+              size: 30,
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
           ),
-          Text(
-            "Geri",
-            style: TextStyle(
-                color: new_event_color,
-                fontWeight: FontWeight.bold,
-                fontSize: 20),
+          GestureDetector(
+            child: Text(
+              "Geri",
+              style: TextStyle(
+                  color: new_event_color,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
           ),
           SizedBox(
-            height: size.height*0.15,
+            height: size.height * 0.15,
             width: size.width * 0.45,
           ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: butonBorder,
-              gradient: LinearGradient(
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.bottomRight,
-                  stops: [
-                    0.1,
-                    0.8,
-                  ],
-                  colors: [
-                    Color.fromRGBO(30, 227, 167, 1),
-                    Color.fromRGBO(220, 247, 239, 1),
-                  ]),
+          GestureDetector(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: butonBorder,
+                gradient: LinearGradient(
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.bottomRight,
+                    stops: [
+                      0.1,
+                      0.8,
+                    ],
+                    colors: [
+                      Color.fromRGBO(30, 227, 167, 1),
+                      Color.fromRGBO(220, 247, 239, 1),
+                    ]),
+              ),
+              height: size.height * 0.08,
+              width: size.width * 0.15,
+              child: Icon(
+                _eventInProgress ? Icons.lock : Icons.save,
+                color: Colors.white,
+                size: 40,
+              ),
             ),
-            height: size.height * 0.08,
-            width: size.width * 0.15,
-            child: Icon(
-              Icons.save,
-              color: Colors.white,
-              size: 40,
-            ),
+            onTap: () {
+              if (!_eventInProgress) {
+                _veriEkle(userModel);
+              }
+            },
           )
         ],
       ),
     );
   }
 
-  @override
   Widget buildDropdown(BuildContext context) {
     String dropdownValue = 'Komite Seçiniz';
     return Container(
-      child: DropdownButton<String>(
-        value: dropdownValue,
+      child: DropdownButton<int>(
         icon: Icon(
           Icons.arrow_downward,
           color: new_event_color,
@@ -253,23 +302,120 @@ class _Create_EventState extends State<Create_Event> {
           height: 2,
           color: new_event_color,
         ),
-        onChanged: (String newValue) {
+        items: [
+          buildDropdownMenuItem("Computer Society", 1),
+          buildDropdownMenuItem("Educational Activities", 2),
+          buildDropdownMenuItem("Power And Energy Society", 3),
+          buildDropdownMenuItem("Robotics & Automation Society", 4),
+          buildDropdownMenuItem("Women in Engineering", 5),
+        ],
+        onChanged: (int secilen) {
           setState(() {
-            dropdownValue = newValue;
+            category = secilen;
           });
         },
-        items: <String>[
-          'Komite Seçiniz',
-          'Woman In Engineering',
-          'Computer Society',
-          'PES'
-        ].map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
+        hint: Text(dropdownValue),
+        value: category,
       ),
     );
+  }
+
+  DropdownMenuItem<int> buildDropdownMenuItem(String text, int value) {
+    return DropdownMenuItem<int>(
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: 24,
+            height: 24,
+            margin: EdgeInsets.only(right: 10),
+          ),
+          Text(text),
+        ],
+      ),
+      value: value,
+    );
+  }
+
+  Future<void> getEtkinlikler(UserModel userModel) async {
+    etkinlikler = await userModel.getEtkinlikler();
+  }
+
+  _galeriResimUpload() async {
+    final picker = ImagePicker();
+    var pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _secilenResim = File(pickedFile.path);
+    });
+  }
+
+  _veriEkle(UserModel userModel) async {
+    setState(() {
+      _eventInProgress = true;
+    });
+    if (_secilenResim == null) {
+      PlatformDuyarliAlertDialog(
+        baslik: "HATA",
+        icerik: "Lütfen resim yükleyiniz!!!",
+        anaButonYazisi: "Tamam",
+      ).goster(context);
+      setState(() {
+        _eventInProgress = false;
+      });
+    } else {
+      if (Create_Event.formKey.currentState.validate()) {
+        Create_Event.formKey.currentState.save();
+
+        String url = await userModel.uploadFile(
+            "Etkinlikler", _secilenResim, event_name, "event_photo.png");
+
+        List katilimcilar = [];
+
+        List categoryList = [0];
+        categoryList.add(category);
+
+        Map<String, dynamic> docMap = {};
+
+        Create_Event.formKey.currentState.save();
+        Map<String, dynamic> data = Map();
+        data["Etkinlik Adı"] = event_name;
+        data["Etkinlik Konumu"] = location;
+        data["Etkinlik Photo Url"] = url;
+        data["category"] = categoryList;
+        data["Katilimcilar"] = katilimcilar;
+        data["Dosyalar"] = docMap;
+
+        bool sonuc = await userModel.setData("Etkinlikler", event_name, data);
+
+        if (sonuc == true || sonuc == null) {
+          final sonuc1 = await PlatformDuyarliAlertDialog(
+            baslik: "Etkinlik Oluşturuldu",
+            icerik: "Etkinlik Başarıyla Oluşturuldu 👍",
+            anaButonYazisi: "Tamam",
+          ).goster(context);
+          if (sonuc1) {
+            Navigator.pop(context);
+          }
+        } else {
+          PlatformDuyarliAlertDialog(
+            baslik: "Etkinlik Oluşturulamadı",
+            icerik: "Etkinlik oluşturulurken sorun oluştu 😕",
+            anaButonYazisi: "Tamam",
+          ).goster(context);
+          setState(() {
+            _eventInProgress = false;
+          });
+        }
+      } else {
+        PlatformDuyarliAlertDialog(
+          baslik: "Değerleri Doğru Giriniz",
+          icerik: "Lütfen istenilen değerleri tam ve doğru giriniz",
+          anaButonYazisi: "Tamam",
+        ).goster(context);
+        setState(() {
+          _eventInProgress = false;
+        });
+      }
+    }
   }
 }

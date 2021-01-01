@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../const.dart';
 
 class CreateAcc extends StatelessWidget {
@@ -107,7 +108,7 @@ class CreateAcc extends StatelessWidget {
                     style: TextStyle(color: Colors.grey.shade400),
                     decoration: InputDecoration(
                         prefixIcon: Icon(
-                          Icons.lock_sharp,
+                          Icons.lock,
                           color: Colors.yellow.shade500,
                           size: 30,
                         ),

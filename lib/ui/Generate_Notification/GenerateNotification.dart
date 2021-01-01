@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:topluluk_tasarim/const.dart';
+
+import "../const.dart";
 
 class Notice extends StatelessWidget {
   var formKey = GlobalKey<FormState>();
@@ -127,23 +128,41 @@ class Notice extends StatelessWidget {
 
   Widget buildBackAndSave(context) {
     return Padding(
-      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1,top: MediaQuery.of(context).size.width*0.08),
+      padding: EdgeInsets.only(
+          left: MediaQuery.of(context).size.width * 0.1,
+          top: MediaQuery.of(context).size.width * 0.08),
       child: Row(
-        
         children: [
-          
-          Icon(Icons.arrow_back_ios,color:Color.fromRGBO(0, 182, 183, 1),size: 30,),
-          Text("Geri", style: TextStyle(color: Color.fromRGBO(0, 182, 183, 1),fontWeight: FontWeight.bold,fontSize: 20),),
-          SizedBox(width: size.width*0.4,),
+          Icon(
+            Icons.arrow_back_ios,
+            color: Color.fromRGBO(0, 182, 183, 1),
+            size: 30,
+          ),
+          Text(
+            "Geri",
+            style: TextStyle(
+                color: Color.fromRGBO(0, 182, 183, 1),
+                fontWeight: FontWeight.bold,
+                fontSize: 20),
+          ),
+          SizedBox(
+            width: size.width * 0.4,
+          ),
           Container(
-            decoration: BoxDecoration(
-              borderRadius: butonBorder,
-              gradient: blueBotton,
-            ),
-            height: size.height*0.09,
-            width: size.width*0.25,
-            child: Center(child: Text("Kaydet",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize:20),))
-          )
+              decoration: BoxDecoration(
+                borderRadius: butonBorder,
+                gradient: blueBotton,
+              ),
+              height: size.height * 0.09,
+              width: size.width * 0.25,
+              child: Center(
+                  child: Text(
+                "Kaydet",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              )))
         ],
       ),
     );

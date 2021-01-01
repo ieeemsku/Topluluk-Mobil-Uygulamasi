@@ -56,7 +56,7 @@ class LoginPage extends StatelessWidget {
                 GestureDetector(
                     child: hesapOlustur(),
                     onTap: (() => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => NewUser()))))
+                        MaterialPageRoute(builder: (context) => CreateAcc()))))
               ],
             ),
           ),
@@ -166,8 +166,8 @@ class LoginPage extends StatelessWidget {
                 ),
                 GestureDetector(
                   child: Container(
-                      height: 50,
-                      width: 100,
+                      height: size.height * 0.07,
+                      width: size.width * 0.25,
                       decoration: BoxDecoration(
                           gradient: indigoButton,
                           borderRadius: BorderRadius.circular(5)),

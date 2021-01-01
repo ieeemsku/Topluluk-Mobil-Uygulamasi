@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:topluluk_tasarim/const.dart';
+
+import '../const.dart';
 
 class ChangePassword extends StatelessWidget {
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();

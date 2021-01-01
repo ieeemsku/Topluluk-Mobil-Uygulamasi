@@ -1,6 +1,8 @@
 import 'package:fancy_on_boarding/fancy_on_boarding.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:stuventmobil/ui/Login/login.dart';
+import 'package:provider/provider.dart';
+import 'package:stuventmobil/viewmodel/user_model.dart';
 
 class Intro extends StatefulWidget {
   @override
@@ -34,7 +36,11 @@ class _IntroState extends State<Intro> {
     PageModel(
         color: color,
         heroAssetPath: path + 'EA_420x.png',
-        title: Text("Educational Activities", style: titleTextStyle),
+        title: Text(
+          "Educational Activities",
+          style: titleTextStyle,
+          textAlign: TextAlign.center,
+        ),
         body: Text(
             "Daha öncesinde Sosyal Sorumluluk Projesi (SSP) olarak bilinen ve "
             "eğitim amacını vurgulamak hedefi ile 2018-2019 eğitim yılına giriş "
@@ -95,14 +101,14 @@ class _IntroState extends State<Intro> {
         doneButtonText: "Tamam",
         skipButtonText: "Geç",
         pageList: pageList,
-        onDoneButtonPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        ),
-        onSkipButtonPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        ),
+        onDoneButtonPressed: () {
+          final _usermodel = Provider.of<UserModel>(context, listen: false);
+          _usermodel.intro = true;
+        },
+        onSkipButtonPressed: () {
+          final _usermodel = Provider.of<UserModel>(context, listen: false);
+          _usermodel.intro = true;
+        },
       ),
     );
   }

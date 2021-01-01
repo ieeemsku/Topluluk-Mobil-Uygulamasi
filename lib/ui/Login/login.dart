@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:stuventmobil/app/exceptions.dart';
 import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
+import 'package:stuventmobil/model/userC.dart';
 import 'package:stuventmobil/ui/Login/new_User.dart';
+import 'package:stuventmobil/ui/intro/intro.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
 import '../const.dart';
@@ -276,7 +278,12 @@ class LoginPage extends StatelessWidget {
 
       final _usermodel = Provider.of<UserModel>(context, listen: false);
       try {
-        await _usermodel.signInWithEmailandPassword(mail, password);
+        UserC userC =
+            await _usermodel.signInWithEmailandPassword(mail, password);
+        if (userC != null) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Intro()));
+        }
       } catch (e) {
         PlatformDuyarliAlertDialog(
           baslik: "E-posta ve Şifre ile Giriş HATA",
@@ -289,6 +296,9 @@ class LoginPage extends StatelessWidget {
 
   Future<void> gSignIn(BuildContext context) async {
     final _userModel = Provider.of<UserModel>(context, listen: false);
-    await _userModel.signInWithGoogle();
+    UserC userC = await _userModel.signInWithGoogle();
+    if (userC != null) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Intro()));
+    }
   }
 }

@@ -1,6 +1,8 @@
 import 'package:fancy_on_boarding/fancy_on_boarding.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:stuventmobil/ui/Login/login.dart';
+import 'package:provider/provider.dart';
+import 'package:stuventmobil/viewmodel/user_model.dart';
 
 class Intro extends StatefulWidget {
   @override
@@ -34,7 +36,11 @@ class _IntroState extends State<Intro> {
     PageModel(
         color: color,
         heroAssetPath: path + 'EA_420x.png',
-        title: Text("Educational Activities", style: titleTextStyle),
+        title: Text(
+          "Educational Activities",
+          style: titleTextStyle,
+          textAlign: TextAlign.center,
+        ),
         body: Text(
             "Daha öncesinde Sosyal Sorumluluk Projesi (SSP) olarak bilinen ve "
             "eğitim amacını vurgulamak hedefi ile 2018-2019 eğitim yılına giriş "
@@ -43,6 +49,50 @@ class _IntroState extends State<Intro> {
             textAlign: TextAlign.center,
             style: bodyTextStyle),
         iconAssetPath: path + 'EA_90x.png'),
+    PageModel(
+        color: color,
+        heroAssetPath: path + 'CSoc_420x.png',
+        title: Text(
+          "Communications Society",
+          style: titleTextStyle,
+          textAlign: TextAlign.center,
+        ),
+        body: Text(
+            "IEEE Communications Society (ComSoc) Dünya çapında geliştirilen mühendislik metodolojisini "
+            "haberleşme teknolojisine uygulayan, bu amaçla insan yaşam kalitesini arttırmaya yönelik; mesleki "
+            "gelişimi sağlama, mesleğe teşviki arttırmayı ilke edinmiş telekomünikasyon mühendisleri topluluğudur.",
+            textAlign: TextAlign.center,
+            style: bodyTextStyle),
+        iconAssetPath: path + 'CSoc_90x.png'),
+    PageModel(
+        color: color,
+        heroAssetPath: path + 'PES_420x.png',
+        title: Text(
+          "Power And Energy Society",
+          style: titleTextStyle,
+          textAlign: TextAlign.center,
+        ),
+        body: Text(
+            "Power and Energy Society(PES) yani Güç ve Enerji Topluluğu,IEEE‘nin bünyesinde barındırdığı "
+            "39 topluluk arasında en eski olanlarından biridir. Temel olarak uğraştığı sektör enerji sektörüdür. "
+            "Enerjiyi mümkün olduğu kadar çevreci, verimli, olabilecek en yüksek faydada, hayati tehlike taşımadan,"
+            "plan yapan ve çalışan bir topluluktur.",
+            textAlign: TextAlign.center,
+            style: bodyTextStyle),
+        iconAssetPath: path + 'PES_90x.png'),
+    PageModel(
+        color: color,
+        heroAssetPath: path + 'WIE _420x.png',
+        title: Text("Women in Engineering", style: titleTextStyle),
+        body: Text(
+            " WIE, IEEE’nin diğer komitelerinden farklı olarak bir farkındalık komitesidir. IEEE WIE, "
+            "kadınların da kendi istedikleri meslekleri seçmesi ve bu mesleklerde kendilerini daha iyi ifade "
+            "etmeleri için farkındalık çalışmalarını yürütüyor. Özellikle kadınların da mühendislik, bilim, "
+            "kariyer ve yönetim alanlarında en az erkekler kadar sektörün içinde ve onlar kadar söz sahibi "
+            "olmasını sağlamaya çalışıyor.",
+            textAlign: TextAlign.center,
+            style: bodyTextStyle),
+        iconAssetPath: path + 'WIE_90.png')
   ];
   @override
   Widget build(BuildContext context) {
@@ -51,14 +101,14 @@ class _IntroState extends State<Intro> {
         doneButtonText: "Tamam",
         skipButtonText: "Geç",
         pageList: pageList,
-        onDoneButtonPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        ),
-        onSkipButtonPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        ),
+        onDoneButtonPressed: () {
+          final _usermodel = Provider.of<UserModel>(context, listen: false);
+          _usermodel.intro = true;
+        },
+        onSkipButtonPressed: () {
+          final _usermodel = Provider.of<UserModel>(context, listen: false);
+          _usermodel.intro = true;
+        },
       ),
     );
   }

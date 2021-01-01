@@ -1,130 +1,151 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
-import 'package:stuventmobil/viewmodel/user_model.dart';
+import 'package:topluluk_tasarim/const.dart';
 
-class GenerateNotification extends StatefulWidget {
-  @override
-  _GenerateNotificationState createState() => _GenerateNotificationState();
-}
-
-class _GenerateNotificationState extends State<GenerateNotification> {
-  String title, message, bigText;
-  String result = "";
-  final formKey = GlobalKey<FormState>();
-
+class Notice extends StatelessWidget {
+  var formKey = GlobalKey<FormState>();
+  var key1 = GlobalKey<FormState>();
+  var key2 = GlobalKey<FormState>();
+  var key3 = GlobalKey<FormState>();
+  Size size;
   @override
   Widget build(BuildContext context) {
-    UserModel _userModel = Provider.of<UserModel>(context);
-    return Theme(
-        data: Theme.of(context).copyWith(
-            accentColor: Colors.green,
-            hintColor: Colors.indigo,
-            errorColor: Colors.red,
-            primaryColor: Colors.teal),
-        child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              _bildirimOlustur(_userModel);
-            },
-            backgroundColor: Colors.teal,
-            child: Icon(Icons.notifications),
-          ),
-          appBar: AppBar(
-            title: Text("Bildirim Oluştur"),
-          ),
-          body: Padding(
-            padding: EdgeInsets.all(10),
-            child: Form(
-              key: formKey,
-              child: ListView(
-                children: <Widget>[
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    textInputAction: TextInputAction.done,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.title),
-                      hintText: "Başlık",
-                      hintStyle: TextStyle(fontSize: 12),
-                      labelText: "Bildirim Başlığı",
-                      border: OutlineInputBorder(),
-                    ),
-                    onSaved: (String value) => title = value,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    textInputAction: TextInputAction.done,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.message),
-                      hintText: "Özet",
-                      hintStyle: TextStyle(fontSize: 12),
-                      labelText: "Bildirim Özeti",
-                      border: OutlineInputBorder(),
-                    ),
-                    onSaved: (String value) => message = value,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    textInputAction: TextInputAction.newline,
-                    maxLines: 6,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.text_fields),
-                      hintText: "Uzun Mesaj",
-                      hintStyle: TextStyle(fontSize: 12),
-                      labelText: "Bildirim Uzun Mesajı",
-                      border: OutlineInputBorder(),
-                    ),
-                    onSaved: (String value) => bigText = value,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: Text(
-                      result,
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ));
+    size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            buildHeader(context),
+            Theme(
+                data: ThemeData(primaryColor: Color.fromRGBO(0, 182, 183, 1)),
+                child: buildTextFormField(context)),
+            buildBackAndSave(context)
+          ],
+        ),
+      ),
+    );
   }
 
-  _bildirimOlustur(UserModel userModel) async {
-    setState(() {
-      result = "Bildirim oluşturuluyor...";
-    });
+  Widget buildHeader(context) {
+    return Container(
+      height: size.height * 0.25,
+      width: size.width,
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(0, 182, 183, 1),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: size.width * 0.1),
+            child: Text(
+              "Bildirim\nOluştur",
+              style: headerText,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-    formKey.currentState.save();
+  Widget buildTextFormField(BuildContext context) {
+    return Column(
+      children: [
+        Form(
+            key: formKey,
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: size.width * 0.1, right: size.width * 0.1),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: size.height * 0.05,
+                  ),
+                  TextFormField(
+                    style: TextStyle(color: Colors.grey.shade700),
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(0, 182, 183, 1))),
+                      hintText: 'Bildirim Başlığı',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                    ),
+                    key: key1,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.05,
+                  ),
+                  TextFormField(
+                    style: TextStyle(color: Colors.grey.shade700),
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(0, 182, 183, 1))),
+                      hintText: 'Bildirim Özeti',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                    ),
+                    key: key2,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.05,
+                  ),
+                  TextFormField(
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                    ),
+                    key: key3,
+                    keyboardType: TextInputType.multiline,
+                    minLines: 3,
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(0, 182, 183, 1))),
+                      hintText: 'Bildirim Uzun Mesaj',
+                      counterText: "50 karakter",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                    ),
+                  ),
+                ],
+              ),
+            ))
+      ],
+    );
+  }
 
-    bool sonuc = await userModel.generateNotification(title, message, bigText);
-
-    if (sonuc == true || sonuc == null) {
-      await PlatformDuyarliAlertDialog(
-        baslik: "Bildirim Oluşturuldu",
-        icerik: "Bildirim Başarıyla Oluşturuldu",
-        anaButonYazisi: "Tamam",
-      ).goster(context);
-      setState(() {
-        result = "Bildirim oluşturuldu";
-      });
-    } else {
-      PlatformDuyarliAlertDialog(
-        baslik: "Bildirim Oluşturulamadı",
-        icerik: "Bildirim Oluşturulurken sorun oluştu",
-        anaButonYazisi: "Tamam",
-      ).goster(context);
-      setState(() {
-        result = "Bildirim oluşturulamadı";
-      });
-    }
+  Widget buildBackAndSave(context) {
+    return Padding(
+      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1,top: MediaQuery.of(context).size.width*0.08),
+      child: Row(
+        
+        children: [
+          
+          Icon(Icons.arrow_back_ios,color:Color.fromRGBO(0, 182, 183, 1),size: 30,),
+          Text("Geri", style: TextStyle(color: Color.fromRGBO(0, 182, 183, 1),fontWeight: FontWeight.bold,fontSize: 20),),
+          SizedBox(width: size.width*0.4,),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: butonBorder,
+              gradient: blueBotton,
+            ),
+            height: size.height*0.09,
+            width: size.width*0.25,
+            child: Center(child: Text("Kaydet",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize:20),))
+          )
+        ],
+      ),
+    );
   }
 }

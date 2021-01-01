@@ -1,198 +1,168 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:stuventmobil/viewmodel/user_model.dart';
-import 'package:stuventmobil/app/exceptions.dart';
-import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
-import 'package:stuventmobil/model/userC.dart';
+import '../const.dart';
 
-class NewUser extends StatefulWidget {
-  @override
-  _NewUserState createState() => _NewUserState();
-}
-
-class _NewUserState extends State<NewUser> {
-  final formKey = GlobalKey<FormState>();
-
-  String name, lastname, mail, password;
-  String result = "";
-  bool otomatikKontrol = false;
-
+class CreateAcc extends StatelessWidget {
+  static GlobalKey<FormState> formKeyy = GlobalKey<FormState>();
+  static Key keyy1 = new GlobalKey();
+  static Key keyy2 = new GlobalKey();
+  static Key keyy3 = new GlobalKey();
+  Size size;
   @override
   Widget build(BuildContext context) {
-    return Theme(
-        data: Theme.of(context).copyWith(
-            accentColor: Colors.green,
-            hintColor: Colors.indigo,
-            errorColor: Colors.red,
-            primaryColor: Colors.teal),
-        child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              _generateNewUser();
-            },
-            backgroundColor: Colors.teal,
-            child: Icon(Icons.save),
-          ),
-          appBar: AppBar(
-            title: Text("Üye Kayıt"),
-          ),
-          body: Padding(
-            padding: EdgeInsets.all(10),
-            child: Form(
-              key: formKey,
-              child: ListView(children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.account_circle),
-                    hintText: "Ad",
-                    hintStyle: TextStyle(fontSize: 12),
-                    labelText: "Adınız",
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: _isimKontrol,
-                  onSaved: (String value) => name = value,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.account_circle),
-                    hintText: "Soyad",
-                    hintStyle: TextStyle(fontSize: 12),
-                    labelText: "Soyadınız",
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: _soyisimKontrol,
-                  onSaved: (String value) => lastname = value,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.email),
-                    hintText: "E-mail",
-                    hintStyle: TextStyle(fontSize: 12),
-                    labelText: "E-mail adresiniz",
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: _emailKontrol,
-                  onSaved: (String value) => mail = value,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.lock),
-                    hintText: "Şifre",
-                    hintStyle: TextStyle(fontSize: 12),
-                    labelText: "Şifreniz",
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (String value) {
-                    if (value.length < 6) {
-                      return "En az 6 karakter gerekli";
-                    }
-                    return null;
-                  },
-                  onSaved: (String value) => password = value,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: Text(
-                    result,
-                    textAlign: TextAlign.center,
-                  ),
-                )
-              ]),
+    size = MediaQuery.of(context).size;
+
+    return Container(
+      decoration: BoxDecoration(gradient: createAccBg),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                buildHeader(),
+                Theme(
+                    data: ThemeData(primaryColor: new_event_color),
+                    child: buildTextField()),
+                buildBackButton(context)
+              ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildHeader() {
+    return Container(
+        height: size.height * 0.25,
+        width: size.width * 0.85,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Hesap\nOluştur",
+              style: headerText,
+            )
+          ],
         ));
   }
 
-  Future<void> _generateNewUser() async {
-    setState(() {
-      result = "Üye kayıt ediliyor...";
-    });
-
-    if (formKey.currentState.validate()) {
-      formKey.currentState.save();
-
-      final _userModel = Provider.of<UserModel>(context, listen: false);
-      try {
-        UserC _user = await _userModel.createUserWithEmailandPassword(
-            name, lastname, mail, password, false);
-        if (_user != null) {
-          var sonuc = await PlatformDuyarliAlertDialog(
-            baslik: "Kaydınız Başarıyla Gerçekleştirildi :)",
-            icerik: "Uygulamamızın keyfini çıkarabilirsiniz 🥳",
-            anaButonYazisi: "Tamam",
-          ).goster(context);
-          if (sonuc) {
-            Navigator.pop(context);
-          }
-          setState(() {
-            result = "Üye Kayıt Edildi\n "
-                "Uygulamamızın keyfini çıkarabilirsiniz 🥳";
-          });
-        } else {
-          setState(() {
-            result = "Üye Kayıt edilirken sorun oluştu";
-          });
-        }
-      } on PlatformException catch (e) {
-        PlatformDuyarliAlertDialog(
-          baslik: "Kullanıcı Oluşturma HATA",
-          icerik: Exceptions.goster(e.code),
-          anaButonYazisi: 'Tamam',
-        ).goster(context);
-      }
-    } else {
-      setState(() {
-        otomatikKontrol = true;
-        result = "Girilen Bilgileri Doğru giriniz";
-      });
-    }
+  Widget buildTextField() {
+    return Container(
+        height: size.height * 0.52,
+        width: size.width * 0.85,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+                offset: Offset(1, 2),
+                blurRadius: 4,
+                color: Colors.grey.shade600)
+          ],
+        ),
+        child: Form(
+            key: formKeyy,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20.0, right: 30, left: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextFormField(
+                    style: TextStyle(color: Colors.grey.shade400),
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.mail,
+                          color: Colors.yellow.shade500,
+                          size: 30,
+                        ),
+                        hintStyle: TextStyle(
+                            fontFamily: "Ubuntu",
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade400,
+                            fontSize: 17),
+                        hintText: "E-Posta Adresi"),
+                    key: keyy1,
+                  ),
+                  TextFormField(
+                    key: keyy2,
+                    style: TextStyle(color: Colors.grey.shade400),
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.person,
+                          color: Colors.yellow.shade500,
+                          size: 30,
+                        ),
+                        hintStyle: TextStyle(
+                            fontFamily: "Ubuntu",
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade400,
+                            fontSize: 17),
+                        hintText: "Kullanıcı Adı"),
+                  ),
+                  TextFormField(
+                    key: keyy3,
+                    style: TextStyle(color: Colors.grey.shade400),
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.lock_sharp,
+                          color: Colors.yellow.shade500,
+                          size: 30,
+                        ),
+                        hintStyle: TextStyle(
+                            fontFamily: "Ubuntu",
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade400,
+                            fontSize: 17),
+                        hintText: "Şifre"),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Hakkımızda",
+                          style: TextStyle(
+                              color: Colors.grey.shade400,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18)),
+                      Container(
+                        height: 50,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            gradient: orangeButton,
+                            borderRadius: BorderRadius.circular(10)),
+                        child:
+                            Icon(Icons.arrow_forward_ios, color: Colors.white),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            )));
   }
 
-  String _isimKontrol(String isim) {
-    RegExp regex = RegExp(
-        "^[abcçdefgğhıijklmnoöprsştuüvyzqwxABCÇDEFGHIİJKLMNOÖPRSŞTUÜVYZQWX]+\$");
-    if (!regex.hasMatch(isim))
-      return 'Isim numara veya boşluk içermemeli';
-    else
-      return null;
-  }
-
-  String _soyisimKontrol(String soyisim) {
-    RegExp regex = RegExp(
-        "^[abcçdefgğhıijklmnoöprsştuüvyzqwxABCÇDEFGHIİJKLMNOÖPRSŞTUÜVYZQWX]+\$");
-    if (!regex.hasMatch(soyisim))
-      return 'Soyisim numara veya boşluk içermemeli';
-    else
-      return null;
-  }
-
-  String _emailKontrol(String mail) {
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(mail))
-      return 'Geçersiz mail';
-    else
-      return null;
+  buildBackButton(context) {
+    return Padding(
+      padding: EdgeInsets.only(
+          left: MediaQuery.of(context).size.width * 0.1,
+          top: MediaQuery.of(context).size.width * 0.1),
+      child: Row(
+        children: [
+          Container(
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 30,
+            ),
+          ),
+          Text(
+            "Geri",
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+          )
+        ],
+      ),
+    );
   }
 }

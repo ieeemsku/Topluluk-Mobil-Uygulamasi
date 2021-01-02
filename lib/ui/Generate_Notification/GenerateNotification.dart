@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
+import 'package:stuventmobil/viewmodel/user_model.dart';
 
 import "../const.dart";
 
@@ -8,6 +11,9 @@ class Notice extends StatelessWidget {
   var key2 = GlobalKey<FormState>();
   var key3 = GlobalKey<FormState>();
   Size size;
+
+  String title, message, bigText;
+
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
@@ -80,6 +86,7 @@ class Notice extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20)),
                     ),
                     key: key1,
+                    onSaved: (String value) => title = value,
                   ),
                   SizedBox(
                     height: size.height * 0.05,
@@ -96,6 +103,7 @@ class Notice extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20)),
                     ),
                     key: key2,
+                    onSaved: (String value) => message = value,
                   ),
                   SizedBox(
                     height: size.height * 0.05,
@@ -118,6 +126,7 @@ class Notice extends StatelessWidget {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20)),
                     ),
+                    onSaved: (String value) => bigText = value,
                   ),
                 ],
               ),
@@ -127,44 +136,89 @@ class Notice extends StatelessWidget {
   }
 
   Widget buildBackAndSave(context) {
+    UserModel _userModel = Provider.of<UserModel>(context);
     return Padding(
       padding: EdgeInsets.only(
           left: MediaQuery.of(context).size.width * 0.1,
           top: MediaQuery.of(context).size.width * 0.08),
       child: Row(
         children: [
-          Icon(
-            Icons.arrow_back_ios,
-            color: Color.fromRGBO(0, 182, 183, 1),
-            size: 30,
+          GestureDetector(
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: Color.fromRGBO(0, 182, 183, 1),
+              size: 30,
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
           ),
-          Text(
-            "Geri",
-            style: TextStyle(
-                color: Color.fromRGBO(0, 182, 183, 1),
-                fontWeight: FontWeight.bold,
-                fontSize: 20),
+          GestureDetector(
+            child: Text(
+              "Geri",
+              style: TextStyle(
+                  color: Color.fromRGBO(0, 182, 183, 1),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
           ),
           SizedBox(
             width: size.width * 0.4,
           ),
-          Container(
-              decoration: BoxDecoration(
-                borderRadius: butonBorder,
-                gradient: blueBotton,
-              ),
-              height: size.height * 0.09,
-              width: size.width * 0.25,
-              child: Center(
-                  child: Text(
-                "Kaydet",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              )))
+          GestureDetector(
+            child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: butonBorder,
+                  gradient: blueBotton,
+                ),
+                height: size.height * 0.09,
+                width: size.width * 0.25,
+                child: Center(
+                    child: Text(
+                  "Kaydet",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ))),
+            onTap: () {
+              _bildirimOlustur(_userModel, context);
+            },
+          )
         ],
       ),
     );
+  }
+
+  _bildirimOlustur(UserModel userModel, BuildContext context) async {
+    PlatformDuyarliAlertDialog(
+      baslik: "Bildirim Oluşturuluyor 😎",
+      icerik: "Bildirim oluşturuluncaya kadar lütfen bekleyiniz.",
+      anaButonYazisi: "Tamam",
+    ).goster(context);
+
+    formKey.currentState.save();
+
+    bool sonuc = await userModel.generateNotification(title, message, bigText);
+
+    if (sonuc == true || sonuc == null) {
+      PlatformDuyarliAlertDialog(
+        baslik: "Bildirim Oluşturuldu 👍",
+        icerik: "Bildirim başarıyla oluşturuldu.\n" +
+            "Bildirim kullanıcıların internet hızı ve Stuvent'ın güncelliğine göre bir "
+                "süre sonra gönderilecektir.",
+        anaButonYazisi: "Tamam",
+      ).goster(context);
+    } else {
+      PlatformDuyarliAlertDialog(
+        baslik: "Bildirim Oluşturulamadı 😕",
+        icerik: "Bildirim oluşturulurken bir sorun oluştu.\n" +
+            "İnternet bağlantınızı kontrol ediniz",
+        anaButonYazisi: "Tamam",
+      ).goster(context);
+    }
   }
 }

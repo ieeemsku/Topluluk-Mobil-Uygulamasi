@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuventmobil/common_widget/merkez_widget.dart';
 import 'package:stuventmobil/ui/Login/login.dart';
-import "package:stuventmobil/ui/homepage/home_page.dart";
-import 'package:stuventmobil/ui/intro/intro.dart';
+import 'package:stuventmobil/ui/homepage/home_page.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
 class LandingPage extends StatelessWidget {
@@ -16,11 +15,7 @@ class LandingPage extends StatelessWidget {
       if (_userModel.user == null) {
         return LoginPage();
       } else {
-        if (_userModel.intro) {
-          return HomePage();
-        } else {
-          return Intro();
-        }
+        return HomePage();
       }
     } else {
       return Scaffold(

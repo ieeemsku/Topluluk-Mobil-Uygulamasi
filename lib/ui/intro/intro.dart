@@ -1,8 +1,6 @@
 import 'package:fancy_on_boarding/fancy_on_boarding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:stuventmobil/viewmodel/user_model.dart';
 
 class Intro extends StatefulWidget {
   @override
@@ -10,7 +8,7 @@ class Intro extends StatefulWidget {
 }
 
 class _IntroState extends State<Intro> {
-  static String path = 'assets/png/';
+  static String path = 'assets/Logolar/';
   static Color white = Colors.white;
   static Color color = Color(0xFF678FB4);
   static TextStyle titleTextStyle =
@@ -23,16 +21,15 @@ class _IntroState extends State<Intro> {
   final pageList = [
     PageModel(
         color: color,
-        heroAssetPath: path + 'CS_420x.png',
+        heroAssetPath: path + 'CS/IEEE-CS_LogoTM-orange.png',
         title: Text("Computer Society", style: titleTextStyle),
         body: Text(
-            "IEEE Computer Society genelini bilgisayar/bilişim mühendislerinin "
-            "oluşturduğu, IEEE'nin alt topluluklarından birisidir. 100,000'den "
-            "fazla üyesi ile dünyanın bilgisayar alanında en büyük mesleki ve "
-            "teknik kuruluşudur.",
+            "Küresel bir teknoloji liderleri topluluğu için güvenilir bilgi, ağ "
+            "iletişimi ve kariyer geliştirme kaynağıdır, 100.000'den fazla üyesi "
+            "ile dünyada bu alandaki en büyük topluluktur.",
             textAlign: TextAlign.center,
             style: bodyTextStyle),
-        iconAssetPath: path + 'CS_90x.png'),
+        iconAssetPath: path + 'CS/IEEE-CS_LogoTM-white.png'),
     PageModel(
         color: color,
         heroAssetPath: path + 'EA_420x.png',
@@ -66,33 +63,46 @@ class _IntroState extends State<Intro> {
         iconAssetPath: path + 'CSoc_90x.png'),
     PageModel(
         color: color,
-        heroAssetPath: path + 'PES_420x.png',
+        heroAssetPath: path + 'PES/IEEE-PES-Logo-RGB.png',
         title: Text(
           "Power And Energy Society",
           style: titleTextStyle,
           textAlign: TextAlign.center,
         ),
         body: Text(
-            "Power and Energy Society(PES) yani Güç ve Enerji Topluluğu,IEEE‘nin bünyesinde barındırdığı "
-            "39 topluluk arasında en eski olanlarından biridir. Temel olarak uğraştığı sektör enerji sektörüdür. "
-            "Enerjiyi mümkün olduğu kadar çevreci, verimli, olabilecek en yüksek faydada, hayati tehlike taşımadan,"
-            "plan yapan ve çalışan bir topluluktur.",
+            "PES enerji alanında daha verimli bir geleceği inşa etmeyi hedefler "
+            "'MORE POWER TO THE FUTURE'.",
             textAlign: TextAlign.center,
             style: bodyTextStyle),
-        iconAssetPath: path + 'PES_90x.png'),
+        iconAssetPath: path + 'PES/IEEE-PES-Logo-White.png'),
     PageModel(
         color: color,
-        heroAssetPath: path + 'WIE _420x.png',
+        heroAssetPath: path + 'WIE/WIE_K_logo_72.png',
         title: Text("Women in Engineering", style: titleTextStyle),
         body: Text(
-            " WIE, IEEE’nin diğer komitelerinden farklı olarak bir farkındalık komitesidir. IEEE WIE, "
-            "kadınların da kendi istedikleri meslekleri seçmesi ve bu mesleklerde kendilerini daha iyi ifade "
-            "etmeleri için farkındalık çalışmalarını yürütüyor. Özellikle kadınların da mühendislik, bilim, "
-            "kariyer ve yönetim alanlarında en az erkekler kadar sektörün içinde ve onlar kadar söz sahibi "
-            "olmasını sağlamaya çalışıyor.",
+            "Mühendislikte kadının öneminin vurgulandığı , cinsiyet eşitliliğini "
+            "topluma yaymak adına kadın erkek herkesin desteklediği ve "
+            "çalışmaların düzenlendiği IEEE alt birimidir.",
             textAlign: TextAlign.center,
             style: bodyTextStyle),
-        iconAssetPath: path + 'WIE_90.png')
+        iconAssetPath: path + 'WIE/WIE_90.png'),
+    PageModel(
+        color: color,
+        heroAssetPath: path + 'RAS/IEEE_RAS_logo_4C_stacked.png',
+        title: Text(
+          "Robotics & Automation Society",
+          style: titleTextStyle,
+          textAlign: TextAlign.center,
+        ),
+        body: Text(
+            "IEEE Robotics and Automation Society amaçları bilimsel, edebi ve "
+            "eğitsel niteliktedir. Bizler, robotik ve otomasyon mühendisliği ve bilimi,"
+            " müttefik sanatlar, bilimler teorisi ve pratiğinin ilerletilmesi ve "
+            "üyeleri arasındaki yüksek mesleki standartların IEEE Anayasası ve Tüzüğü "
+            "ile uyumlu olarak sürdürülmesi için çaba göstermekteyiz.",
+            textAlign: TextAlign.center,
+            style: bodyTextStyle),
+        iconAssetPath: path + 'RAS/IEEE_RAS_logo White_stacked.png')
   ];
   @override
   Widget build(BuildContext context) {
@@ -102,12 +112,10 @@ class _IntroState extends State<Intro> {
         skipButtonText: "Geç",
         pageList: pageList,
         onDoneButtonPressed: () {
-          final _usermodel = Provider.of<UserModel>(context, listen: false);
-          _usermodel.intro = true;
+          Navigator.pop(context);
         },
         onSkipButtonPressed: () {
-          final _usermodel = Provider.of<UserModel>(context, listen: false);
-          _usermodel.intro = true;
+          Navigator.pop(context);
         },
       ),
     );

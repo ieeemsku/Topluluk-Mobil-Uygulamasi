@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:topluluk_tasarim/const.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:stuventmobil/app/exceptions.dart';
+import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
+import 'package:stuventmobil/viewmodel/user_model.dart';
+
+import '../const.dart';
 
 class ChangePassword extends StatelessWidget {
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();
   static Key key1 = new GlobalKey();
   static Key key2 = new GlobalKey();
   static Key key3 = new GlobalKey();
+
+  String mail, oldPassword, newPassword;
+
   @override
   Size size;
   Widget build(BuildContext context) {
@@ -53,7 +62,7 @@ class ChangePassword extends StatelessWidget {
             right: size.width * 0.1,
             left: size.width * 0.1,
             child: Container(
-              height: size.height * 0.5,
+              height: size.height * 0.55,
               width: size.width * 0.6,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -92,11 +101,14 @@ class ChangePassword extends StatelessWidget {
                             hintText: "E-Posta Adresi",
                           ),
                           key: key1,
+                          validator: _emailKontrol,
+                          onSaved: (String value) => mail = value,
                         ),
                         SizedBox(
                           height: 20,
                         ),
                         TextFormField(
+                          obscureText: true,
                           style: TextStyle(color: Colors.indigo.shade200),
                           key: key2,
                           decoration: InputDecoration(
@@ -111,11 +123,19 @@ class ChangePassword extends StatelessWidget {
                                 color: Colors.indigo.shade200,
                                 fontSize: 17),
                           ),
+                          validator: (String value) {
+                            if (value.length < 6) {
+                              return "En az 6 karakter gerekli";
+                            }
+                            return null;
+                          },
+                          onSaved: (String value) => oldPassword = value,
                         ),
                         SizedBox(
                           height: 30,
                         ),
                         TextFormField(
+                          obscureText: true,
                           style: TextStyle(color: Colors.indigo.shade200),
                           key: key3,
                           decoration: InputDecoration(
@@ -130,6 +150,13 @@ class ChangePassword extends StatelessWidget {
                                 color: Colors.indigo.shade200,
                                 fontSize: 17),
                           ),
+                          validator: (String value) {
+                            if (value.length < 6) {
+                              return "En az 6 karakter gerekli";
+                            }
+                            return null;
+                          },
+                          onSaved: (String value) => newPassword = value,
                         ),
                       ]),
                 ),
@@ -149,36 +176,116 @@ class ChangePassword extends StatelessWidget {
           top: MediaQuery.of(context).size.width * 0.08),
       child: Row(
         children: [
-          Icon(
-            Icons.arrow_back_ios,
-            color: Colors.indigo,
-            size: 30,
+          GestureDetector(
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.indigo,
+              size: 30,
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
           ),
-          Text(
-            "Geri",
-            style: TextStyle(
-                color: Colors.indigo,
-                fontWeight: FontWeight.bold,
-                fontSize: 20),
+          GestureDetector(
+            child: Text(
+              "Geri",
+              style: TextStyle(
+                  color: Colors.indigo,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
           ),
           SizedBox(
             width: size.width * 0.4,
           ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: butonBorder,
-              gradient: indigoButton,
+          GestureDetector(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: butonBorder,
+                gradient: indigoButton,
+              ),
+              height: size.height * 0.1,
+              width: size.width * 0.2,
+              child: Icon(
+                Icons.save,
+                color: Colors.white,
+                size: 50,
+              ),
             ),
-            height: size.height * 0.1,
-            width: size.width * 0.2,
-            child: Icon(
-              Icons.save,
-              color: Colors.white,
-              size: 50,
-            ),
+            onTap: () {
+              _updatePassword(context);
+            },
           )
         ],
       ),
     );
+  }
+
+  String _emailKontrol(String mail) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(mail))
+      return 'Geçersiz mail';
+    else
+      return null;
+  }
+
+  Future<void> _updatePassword(BuildContext context) async {
+    PlatformDuyarliAlertDialog(
+      baslik: "Şifreniz Güncelleniyor...",
+      icerik: "Lütfen şifreniz güncelenirken bekleyiniz 😉",
+      anaButonYazisi: "Tamam",
+    ).goster(context);
+
+    if (formKey.currentState.validate()) {
+      formKey.currentState.save();
+
+      UserModel _userModel = Provider.of<UserModel>(context, listen: false);
+      try {
+        await _userModel
+            .signInWithEmailandPassword(mail, oldPassword)
+            .then((value) async {
+          bool sonuc = await _userModel.sifreGuncelle(newPassword);
+          if (sonuc == true || sonuc == null) {
+            var sonuc1 = await PlatformDuyarliAlertDialog(
+              baslik: "Şifreniz Güncellendi 👍",
+              icerik: "Şifreniz başarılı bir şekilde güncellendi",
+              anaButonYazisi: "Tamam",
+            ).goster(context);
+
+            if (sonuc1) {
+              Navigator.pop(context);
+            }
+          } else {
+            final sonuc = await PlatformDuyarliAlertDialog(
+              baslik: "Şifreniz Güncellenemedi 😕",
+              icerik: "Şifreniz güncellenirken bir sorun oluştu.\n" +
+                  "İnternet bağlantınızı kontrol edin",
+              anaButonYazisi: "Tamam",
+            ).goster(context);
+
+            if (sonuc) {
+              Navigator.pop(context);
+            }
+          }
+        }).catchError((e) {
+          PlatformDuyarliAlertDialog(
+            baslik: "Şifre Güncelleme HATA",
+            icerik: Exceptions.goster(e.toString()),
+            anaButonYazisi: "Tamam",
+          ).goster(context);
+        });
+      } on PlatformException catch (e) {
+        PlatformDuyarliAlertDialog(
+          baslik: "Şifre Güncelleme HATA",
+          icerik: Exceptions.goster(e.code),
+          anaButonYazisi: "Tamam",
+        ).goster(context);
+      }
+    }
   }
 }

@@ -5,6 +5,7 @@ import 'package:stuventmobil/app/exceptions.dart';
 import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
 import 'package:stuventmobil/model/userC.dart';
 import 'package:stuventmobil/ui/Login/new_User.dart';
+import 'package:stuventmobil/ui/homepage/home_page.dart';
 import 'package:stuventmobil/ui/intro/intro.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
@@ -56,7 +57,7 @@ class LoginPage extends StatelessWidget {
                 GestureDetector(
                     child: hesapOlustur(),
                     onTap: (() => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => NewUser()))))
+                        MaterialPageRoute(builder: (context) => CreateAcc()))))
               ],
             ),
           ),
@@ -90,7 +91,7 @@ class LoginPage extends StatelessWidget {
 
   Widget buildFormfield(UserModel userModel, BuildContext context) {
     return Container(
-      height: size.height * 0.39,
+      height: size.height * 0.45,
       width: size.width * 0.86,
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
@@ -166,8 +167,8 @@ class LoginPage extends StatelessWidget {
                 ),
                 GestureDetector(
                   child: Container(
-                      height: 50,
-                      width: 100,
+                      height: size.height * 0.07,
+                      width: size.width * 0.25,
                       decoration: BoxDecoration(
                           gradient: indigoButton,
                           borderRadius: BorderRadius.circular(5)),
@@ -282,7 +283,7 @@ class LoginPage extends StatelessWidget {
             await _usermodel.signInWithEmailandPassword(mail, password);
         if (userC != null) {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Intro()));
+              context, MaterialPageRoute(builder: (context) => HomePage()));
         }
       } catch (e) {
         PlatformDuyarliAlertDialog(

@@ -28,6 +28,9 @@ class Exceptions {
       case "user-not-found":
         return "Bu e-posta ile kayıtlı bir kullanıcı bulunamamaktadır.";
 
+      case "email-already-in-use":
+        return "Bu mail adresi zaten kullanımda, lütfen farklı bir mail kullanınız";
+
       default:
         return "Bir hata olustu $hataKodu";
     }

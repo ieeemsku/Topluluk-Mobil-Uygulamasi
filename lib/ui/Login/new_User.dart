@@ -1,12 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stuventmobil/app/exceptions.dart';
+import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
+import 'package:stuventmobil/model/userC.dart';
+import 'package:stuventmobil/ui/intro/intro.dart';
+import 'package:stuventmobil/viewmodel/user_model.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import '../const.dart';
 
-class CreateAcc extends StatelessWidget {
+class CreateAcc extends StatefulWidget {
   static GlobalKey<FormState> formKeyy = GlobalKey<FormState>();
   static Key keyy1 = new GlobalKey();
   static Key keyy2 = new GlobalKey();
   static Key keyy3 = new GlobalKey();
+  static Key keyy4 = new GlobalKey();
+
+  @override
+  _CreateAccState createState() => _CreateAccState();
+}
+
+class _CreateAccState extends State<CreateAcc> {
   Size size;
+
+  String name, lastName, mail, password;
+
+  String ieeeMskuTuzuk = "http://ieeemsku.com/ieee-msku-tuzugu/";
+
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
@@ -23,7 +43,7 @@ class CreateAcc extends StatelessWidget {
                 buildHeader(),
                 Theme(
                     data: ThemeData(primaryColor: new_event_color),
-                    child: buildTextField()),
+                    child: buildTextField(context)),
                 buildBackButton(context)
               ],
             ),
@@ -49,9 +69,9 @@ class CreateAcc extends StatelessWidget {
         ));
   }
 
-  Widget buildTextField() {
+  Widget buildTextField(BuildContext context) {
     return Container(
-        height: size.height * 0.52,
+        height: size.height * 0.60,
         width: size.width * 0.85,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -64,7 +84,7 @@ class CreateAcc extends StatelessWidget {
           ],
         ),
         child: Form(
-            key: formKeyy,
+            key: CreateAcc.formKeyy,
             child: Padding(
               padding: const EdgeInsets.only(top: 20.0, right: 30, left: 30),
               child: Column(
@@ -84,10 +104,12 @@ class CreateAcc extends StatelessWidget {
                             color: Colors.grey.shade400,
                             fontSize: 17),
                         hintText: "E-Posta Adresi"),
-                    key: keyy1,
+                    key: CreateAcc.keyy1,
+                    validator: _emailKontrol,
+                    onSaved: (String value) => mail = value,
                   ),
                   TextFormField(
-                    key: keyy2,
+                    key: CreateAcc.keyy2,
                     style: TextStyle(color: Colors.grey.shade400),
                     decoration: InputDecoration(
                         prefixIcon: Icon(
@@ -100,14 +122,35 @@ class CreateAcc extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             color: Colors.grey.shade400,
                             fontSize: 17),
-                        hintText: "Kullanıcı Adı"),
+                        hintText: "Adınız"),
+                    validator: _isimKonrol,
+                    onSaved: (String value) => name = value,
                   ),
                   TextFormField(
-                    key: keyy3,
+                    key: CreateAcc.keyy4,
                     style: TextStyle(color: Colors.grey.shade400),
                     decoration: InputDecoration(
                         prefixIcon: Icon(
-                          Icons.lock_sharp,
+                          Icons.person,
+                          color: Colors.yellow.shade500,
+                          size: 30,
+                        ),
+                        hintStyle: TextStyle(
+                            fontFamily: "Ubuntu",
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade400,
+                            fontSize: 17),
+                        hintText: "Soyadınız"),
+                    validator: _soyisimKonrol,
+                    onSaved: (String value) => lastName = value,
+                  ),
+                  TextFormField(
+                    obscureText: true,
+                    key: CreateAcc.keyy3,
+                    style: TextStyle(color: Colors.grey.shade400),
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.lock,
                           color: Colors.yellow.shade500,
                           size: 30,
                         ),
@@ -117,23 +160,44 @@ class CreateAcc extends StatelessWidget {
                             color: Colors.grey.shade400,
                             fontSize: 17),
                         hintText: "Şifre"),
+                    validator: (String value) {
+                      if (value.length < 6) {
+                        return "En az 6 karakter gerekli";
+                      }
+                      return null;
+                    },
+                    onSaved: (String value) => password = value,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Hakkımızda",
-                          style: TextStyle(
-                              color: Colors.grey.shade400,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18)),
-                      Container(
-                        height: 50,
-                        width: 100,
-                        decoration: BoxDecoration(
-                            gradient: orangeButton,
-                            borderRadius: BorderRadius.circular(10)),
-                        child:
-                            Icon(Icons.arrow_forward_ios, color: Colors.white),
+                      GestureDetector(
+                        child: Text("Hakkımızda",
+                            style: TextStyle(
+                                color: Colors.grey.shade400,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18)),
+                        onTap: () async {
+                          if (await canLaunch(ieeeMskuTuzuk)) {
+                            await launch(ieeeMskuTuzuk);
+                          } else {
+                            debugPrint("Could not launch: $ieeeMskuTuzuk");
+                          }
+                        },
+                      ),
+                      GestureDetector(
+                        child: Container(
+                          height: 50,
+                          width: 100,
+                          decoration: BoxDecoration(
+                              gradient: orangeButton,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Icon(Icons.arrow_forward_ios,
+                              color: Colors.white),
+                        ),
+                        onTap: () {
+                          _generateNewUser(context);
+                        },
                       )
                     ],
                   ),
@@ -149,20 +213,103 @@ class CreateAcc extends StatelessWidget {
           top: MediaQuery.of(context).size.width * 0.1),
       child: Row(
         children: [
-          Container(
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 30,
+          GestureDetector(
+              child: Container(
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+              }),
+          GestureDetector(
+            child: Text(
+              "Geri",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
             ),
-          ),
-          Text(
-            "Geri",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+            onTap: () {
+              Navigator.pop(context);
+            },
           )
         ],
       ),
     );
+  }
+
+  String _isimKonrol(String isim) {
+    RegExp regex = RegExp(
+        "^[abcçdefgğhıijklmnoöprsştuüvyzqwxABCÇDEFGHIİJKLMNOÖPRSŞTUÜVYZQWX]+\$");
+    if (!regex.hasMatch(isim))
+      return 'Isim numara veya boşluk içermemeli';
+    else
+      return null;
+  }
+
+  String _soyisimKonrol(String soyisim) {
+    RegExp regex = RegExp(
+        "^[abcçdefgğhıijklmnoöprsştuüvyzqwxABCÇDEFGHIİJKLMNOÖPRSŞTUÜVYZQWX]+\$");
+    if (!regex.hasMatch(soyisim))
+      return 'Soyisim numara veya boşluk içermemeli';
+    else
+      return null;
+  }
+
+  String _emailKontrol(String mail) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(mail))
+      return 'Geçersiz mail';
+    else
+      return null;
+  }
+
+  Future<void> _generateNewUser(BuildContext context) async {
+    PlatformDuyarliAlertDialog(
+      baslik: "Üye Kayıt Ediliyor...",
+      icerik: "Üye kayıt edilirken lütfen bekleyiniz",
+      anaButonYazisi: "Tamam",
+    ).goster(context);
+
+    if (CreateAcc.formKeyy.currentState.validate()) {
+      CreateAcc.formKeyy.currentState.save();
+
+      final _userModel = Provider.of<UserModel>(context, listen: false);
+      try {
+        UserC _user = await _userModel.createUserWithEmailandPassword(
+            name, lastName, mail, password, false);
+        if (_user != null) {
+          var sonuc = await PlatformDuyarliAlertDialog(
+            baslik: "Kaydınız Başarıyla Gerçekleştirildi 👍",
+            icerik: "Biraz sonra gösterilecek tanıtımdan sonra giriş ekranına " +
+                "dönerek e-posta adresiniz ve şifreniz ile giriş yapabilirsiniz.\n" +
+                "Stuvent'ın keyfini çıkarabilirsiniz 🥳",
+            anaButonYazisi: "Tamam",
+          ).goster(context);
+          if (sonuc) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Intro()));
+          }
+        } else {
+          PlatformDuyarliAlertDialog(
+            baslik: "Üye Kayıt Edilirken HATA 😕",
+            icerik: "Üye kayıt edilirken bir sorun oluştu.\n" +
+                "Lütfen internet bağlantınızı kontrol edin",
+            anaButonYazisi: "Tamam",
+          ).goster(context);
+        }
+      } catch (e) {
+        PlatformDuyarliAlertDialog(
+          baslik: "Kullanıcı Oluşturma HATA 😕",
+          icerik: Exceptions.goster(e.code),
+          anaButonYazisi: "Tamam",
+        ).goster(context);
+      }
+    }
   }
 }

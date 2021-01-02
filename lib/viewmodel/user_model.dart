@@ -14,14 +14,6 @@ class UserModel with ChangeNotifier implements AuthBase {
   UserC _user;
   String emailHataMesaji;
   String sifreHataMesaji;
-  bool _intro = false;
-
-  bool get intro => _intro;
-
-  set intro(bool value) {
-    _intro = value;
-    notifyListeners();
-  }
 
   UserC get user => _user;
 

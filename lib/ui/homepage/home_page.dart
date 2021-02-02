@@ -9,12 +9,14 @@ import 'package:stuventmobil/model/userC.dart';
 import 'package:stuventmobil/notification_handler.dart';
 import 'package:stuventmobil/styleguide.dart';
 import 'package:stuventmobil/ui/Profil/profil.dart';
+import 'package:stuventmobil/ui/Profil/update_password_page.dart';
 import 'package:stuventmobil/ui/event_details/event_details_page.dart';
+import 'package:stuventmobil/ui/homepage/my_events.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
+import '../../configuration.dart';
 import 'category_widget.dart';
 import 'event_widget.dart';
-import 'my_events.dart';
 
 final TextStyle menuFontStyle = TextStyle(color: Colors.black, fontSize: 18);
 
@@ -25,7 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  double ekranYuksekligi;
+  double ekranYuksekligi, ekranGenisligi;
 
   bool menuAcikMi = false;
 
@@ -57,7 +59,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    ekranGenisligi = MediaQuery.of(context).size.width;
     ekranYuksekligi = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -71,10 +73,10 @@ class _HomePageState extends State<HomePage>
               //   screenHide: ekranYuksekligi,
               // ),
               AnimatedPositioned(
-                top: menuAcikMi ? 0.1 * ekranYuksekligi : 0,
-                bottom: menuAcikMi ? 0.1 * ekranYuksekligi : 0,
-                left: menuAcikMi ? 0.5 * width : 0,
-                right: menuAcikMi ? -0.4 * width : 0,
+                top: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
+                bottom: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
+                left: menuAcikMi ? 0.5 * ekranGenisligi : 0,
+                right: menuAcikMi ? -0.4 * ekranGenisligi : 0,
                 duration: _duration,
                 child: RefreshIndicator(
                   onRefresh: read,
@@ -87,8 +89,8 @@ class _HomePageState extends State<HomePage>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Padding(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: (width / 30)),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: (ekranGenisligi / 30)),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               mainAxisSize: MainAxisSize.max,
@@ -194,51 +196,124 @@ class _HomePageState extends State<HomePage>
   Widget menuOlustur(BuildContext context) {
     return SlideTransition(
       position: _menuOffsetAnimation,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16.0),
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ListTile(
-                leading: CircleAvatar(
-                  child: Icon(Icons.account_circle),
+      child: Container(
+        color: primaryGreen,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: 5,
+                vertical: 40,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  CircleAvatar(
+                    backgroundImage: AssetImage('assets/icon.png'),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        name,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        "Bölüm",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white60),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: 5,
+              ),
+              child: Column(
+                children: drawerItems
+                    .map(
+                      (e) => Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            FlatButton.icon(
+                                onPressed: () {
+                                  if (e['title'] == 'Etkinliklerim') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MyEvents()),
+                                    );
+                                  } else if (e['title'] == 'Profil') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Profil()),
+                                    );
+                                  } else if (e['title'] == 'Şifremi Güncelle') {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ChangePassword()));
+                                  }
+                                },
+                                icon: Icon(
+                                  e['icon'],
+                                  color: Colors.white60,
+                                  size: 24,
+                                ),
+                                label: Text(
+                                  e['title'],
+                                  style: TextStyle(
+                                      color: Colors.white60,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ))
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 20,
                 ),
-                title: Text(name),
-                subtitle: Text("Bölüm"),
-              ),
-              Divider(),
-              FlatButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyEvents()),
-                    );
-                  },
-                  icon: Icon(Icons.event),
-                  label: Text(
-                    "Etkinliklerim",
-                    style: menuFontStyle,
-                  )),
-              SizedBox(
-                height: ekranYuksekligi * 0.6,
-              ),
-              RaisedButton(
-                child: Text(
-                  "Oturumu Kapat",
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w800),
-                ),
-                onPressed: () {
-                  _cikisIcinOnayIste(context);
-                },
-                color: Colors.red,
-              ),
-            ],
-          ),
+                child: Row(
+                  children: <Widget>[
+                    GestureDetector(
+                      child: Text(
+                        'Oturumu Kapat',
+                        style: TextStyle(
+                          color: Colors.white60,
+                          fontSize: 16,
+                        ),
+                      ),
+                      onTap: () {
+                        _cikisIcinOnayIste(context);
+                      },
+                    )
+                  ],
+                ))
+          ],
         ),
       ),
     );

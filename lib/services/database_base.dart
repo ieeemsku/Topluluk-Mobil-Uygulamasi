@@ -11,4 +11,5 @@ abstract class DBBase {
   Future<bool> yoklamaAl(String userName, String userID, String eventName);
   Future<List<String>> readFiles(String anaKlasor, String etkinlikAdi);
   Future<List<dynamic>> readParticipants(String eventName);
+  Future<List<dynamic>> readEvents(String userID);
 }

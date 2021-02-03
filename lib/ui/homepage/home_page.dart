@@ -2,14 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuventmobil/app_state.dart';
+import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
 import 'package:stuventmobil/model/category.dart';
 import 'package:stuventmobil/model/event.dart';
+import 'package:stuventmobil/model/userC.dart';
 import 'package:stuventmobil/notification_handler.dart';
 import 'package:stuventmobil/styleguide.dart';
 import 'package:stuventmobil/ui/Profil/profil.dart';
+import 'package:stuventmobil/ui/Profil/update_password_page.dart';
 import 'package:stuventmobil/ui/event_details/event_details_page.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:stuventmobil/ui/homepage/my_events.dart';
+import 'package:stuventmobil/viewmodel/user_model.dart';
 
+import '../../configuration.dart';
 import 'category_widget.dart';
 import 'event_widget.dart';
 
@@ -22,7 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  double ekranYuksekligi;
+  double ekranYuksekligi, ekranGenisligi;
 
   bool menuAcikMi = false;
 
@@ -31,6 +36,8 @@ class _HomePageState extends State<HomePage>
   final Duration _duration = Duration(milliseconds: 300);
 
   final color = Color(0xFFFF4700);
+
+  String name = "";
 
   @override
   void initState() {
@@ -41,6 +48,7 @@ class _HomePageState extends State<HomePage>
     _controller = AnimationController(vsync: this, duration: _duration);
     _menuOffsetAnimation = Tween(begin: Offset(-1, 0), end: Offset(0, 0))
         .animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+    currentUser();
   }
 
   @override
@@ -51,7 +59,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    ekranGenisligi = MediaQuery.of(context).size.width;
     ekranYuksekligi = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -65,10 +73,10 @@ class _HomePageState extends State<HomePage>
               //   screenHide: ekranYuksekligi,
               // ),
               AnimatedPositioned(
-                top: menuAcikMi ? 0.1 * ekranYuksekligi : 0,
-                bottom: menuAcikMi ? 0.1 * ekranYuksekligi : 0,
-                left: menuAcikMi ? 0.5 * width : 0,
-                right: menuAcikMi ? -0.4 * width : 0,
+                top: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
+                bottom: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
+                left: menuAcikMi ? 0.5 * ekranGenisligi : 0,
+                right: menuAcikMi ? -0.4 * ekranGenisligi : 0,
                 duration: _duration,
                 child: RefreshIndicator(
                   onRefresh: read,
@@ -81,8 +89,8 @@ class _HomePageState extends State<HomePage>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Padding(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: (width / 30)),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: (ekranGenisligi / 30)),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               mainAxisSize: MainAxisSize.max,
@@ -186,81 +194,126 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget menuOlustur(BuildContext context) {
-    String ieeeMskuTuzuk = "http://ieeemsku.com/ieee-msku-tuzugu/";
-
     return SlideTransition(
       position: _menuOffsetAnimation,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16.0),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              FlatButton.icon(
-                  onPressed: () {
-                    menuAcikMiDegistir();
-                  },
-                  icon: Icon(
-                    Icons.home,
-                    color: color,
-                  ),
-                  label: Text(
-                    "Ana Sayfa",
-                    style: menuFontStyle,
-                  )),
-              SizedBox(
-                height: 10,
+      child: Container(
+        color: primaryGreen,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: 5,
+                vertical: 40,
               ),
-              FlatButton.icon(
-                  onPressed: null,
-                  icon: Icon(
-                    Icons.account_balance,
-                    color: color,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  CircleAvatar(
+                    backgroundImage: AssetImage('assets/icon.png'),
                   ),
-                  label: Text(
-                    "Komitelerimiz",
-                    style: menuFontStyle,
-                  )),
-              SizedBox(
-                height: 10,
-              ),
-              FlatButton.icon(
-                  onPressed: () async {
-                    if (await canLaunch(ieeeMskuTuzuk)) {
-                      await launch(ieeeMskuTuzuk);
-                    } else {
-                      debugPrint("Could not launch: $ieeeMskuTuzuk");
-                    }
-                  },
-                  icon: Icon(
-                    Icons.info,
-                    color: color,
+                  SizedBox(
+                    width: 20,
                   ),
-                  label: Text(
-                    "Hakkımızda",
-                    style: menuFontStyle,
-                  )),
-              SizedBox(
-                height: 10,
-              ),
-              FlatButton.icon(
-                  onPressed: null,
-                  icon: Icon(
-                    Icons.mail,
-                    color: color,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        name,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        "Bölüm",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white60),
+                      ),
+                    ],
                   ),
-                  label: Text(
-                    "İletişim",
-                    style: menuFontStyle,
-                  )),
-              SizedBox(
-                height: 10,
+                ],
               ),
-            ],
-          ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: 5,
+              ),
+              child: Column(
+                children: drawerItems
+                    .map(
+                      (e) => Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            FlatButton.icon(
+                                onPressed: () {
+                                  if (e['title'] == 'Etkinliklerim') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MyEvents()),
+                                    );
+                                  } else if (e['title'] == 'Profil') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Profil()),
+                                    );
+                                  } else if (e['title'] == 'Şifremi Güncelle') {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ChangePassword()));
+                                  }
+                                },
+                                icon: Icon(
+                                  e['icon'],
+                                  color: Colors.white60,
+                                  size: 24,
+                                ),
+                                label: Text(
+                                  e['title'],
+                                  style: TextStyle(
+                                      color: Colors.white60,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ))
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 20,
+                ),
+                child: Row(
+                  children: <Widget>[
+                    GestureDetector(
+                      child: Text(
+                        'Oturumu Kapat',
+                        style: TextStyle(
+                          color: Colors.white60,
+                          fontSize: 16,
+                        ),
+                      ),
+                      onTap: () {
+                        _cikisIcinOnayIste(context);
+                      },
+                    )
+                  ],
+                ))
+          ],
         ),
       ),
     );
@@ -275,5 +328,37 @@ class _HomePageState extends State<HomePage>
       }
       menuAcikMi = !menuAcikMi;
     });
+  }
+
+  Future<void> currentUser() async {
+    UserModel userModel = Provider.of<UserModel>(context, listen: false);
+    UserC user = await userModel.currentUser();
+    setState(() {
+      name = user.lastName == null
+          ? "${user.userName}"
+          : "${user.userName} ${user.lastName}";
+    });
+  }
+
+  Future<void> _cikisyap(BuildContext context) async {
+    try {
+      UserModel userModel = Provider.of<UserModel>(context, listen: false);
+      await userModel.signOut();
+    } catch (e) {
+      print("sign out hata:" + e.toString());
+    }
+  }
+
+  Future<void> _cikisIcinOnayIste(BuildContext context) async {
+    final sonuc = await PlatformDuyarliAlertDialog(
+      baslik: "Emin Misiniz?",
+      icerik: "Oturumu kapatmak istediğinizden emin misiniz?",
+      anaButonYazisi: "Evet",
+      iptalButonYazisi: "Vazgeç",
+    ).goster(context);
+
+    if (sonuc) {
+      _cikisyap(context);
+    }
   }
 }

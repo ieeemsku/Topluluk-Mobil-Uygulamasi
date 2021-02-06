@@ -1,25 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:topluluk_tasarim/Pages/home_page.dart';
-
-const detailsColor = Color.fromRGBO(151, 175, 255, 1);
-const detailsColor2 = Color.fromRGBO(213, 217, 255, 1);
 
 const headerText = TextStyle(
     fontFamily: "Ubuntu",
     color: Colors.white,
     fontSize: 40,
-    fontWeight: FontWeight.bold,
-    shadows: <Shadow>[
-      Shadow(
-        offset: Offset(3.0, 3.0),
-        blurRadius: 8.0,
-        color: Color.fromARGB(43, 43, 43, 0),
-      ),
-    ]);
-const headerText2 = TextStyle(
-    fontFamily: "Ubuntu",
-    color: Colors.white,
-    fontSize: 30,
     fontWeight: FontWeight.bold,
     shadows: <Shadow>[
       Shadow(
@@ -42,23 +26,10 @@ const miniHeader = TextStyle(
       ),
     ]);
 
-const miniHeader2 = TextStyle(
-    fontFamily: "Catamaran",
-    color: Colors.white,
-    fontSize: 20,
-    fontWeight: FontWeight.bold,
-    shadows: <Shadow>[
-      Shadow(
-        offset: Offset(5.0, 5.0),
-        blurRadius: 10.0,
-        color: Color.fromARGB(43, 43, 43, 0),
-      ),
-    ]);
-
-var indigoButton = LinearGradient(
+const indigoButton = LinearGradient(
     begin: Alignment.topRight,
     end: Alignment.bottomLeft,
-    stops: <double>[
+    stops: [
       0.1,
       0.4,
       0.9
@@ -68,27 +39,8 @@ var indigoButton = LinearGradient(
       Color.fromRGBO(138, 149, 243, 1),
       Color.fromRGBO(255, 255, 255, 1),
     ]);
-var detailsButton = LinearGradient(
-    begin: Alignment.topRight,
-    end: Alignment.bottomLeft,
-    stops: <double>[
-      0.1,
-      0.4,
-      0.9
-    ],
-    colors: [
-      Color.fromRGBO(151, 175, 255, 1),
-      Color.fromRGBO(151, 175, 255, 1),
-      Color.fromRGBO(255, 255, 255, 1),
-    ]);
 
-var homePageBg = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    stops: [0.1, 0.6, 0.9],
-    colors: [Colors.grey.shade900, Colors.grey, Colors.white]);
-
-var loginPageBg = LinearGradient(
+const loginPageBg = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     stops: [
@@ -139,22 +91,26 @@ const new_event_color_button = LinearGradient(
     stops: [
       0.4,
       0.8,
+      
     ],
     colors: [
       Color.fromRGBO(30, 227, 167, 1),
       Color.fromRGBO(220, 247, 239, 1),
+      
     ]);
 
-const blueBotton = LinearGradient(
+    const blueBotton = LinearGradient(
     begin: Alignment.topRight,
     end: Alignment.bottomLeft,
     stops: [
       0.1,
       0.7,
       0.9
+  
     ],
     colors: [
       Color.fromRGBO(0, 150, 183, 1),
       Color.fromRGBO(141, 211, 212, 1),
       Color.fromRGBO(141, 211, 225, 1),
+
     ]);

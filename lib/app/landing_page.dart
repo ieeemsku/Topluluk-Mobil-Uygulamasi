@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuventmobil/common_widget/merkez_widget.dart';
 import 'package:stuventmobil/ui/Login/login.dart';
-import "package:stuventmobil/ui/homepage/home_page.dart";
+import 'package:stuventmobil/ui/homepage/home_page_elif.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
 class LandingPage extends StatelessWidget {

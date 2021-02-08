@@ -164,7 +164,7 @@ class DetailsPage extends StatelessWidget {
             child: Row(
               children: [
                 Icon(
-                  Icons.arrow_back_sharp,
+                  Icons.arrow_back,
                   color: detailsColor,
                 ),
                 Text(
@@ -181,7 +181,7 @@ class DetailsPage extends StatelessWidget {
           decoration: BoxDecoration(
               gradient: indigoButton, borderRadius: BorderRadius.circular(10)),
           child: Icon(
-            Icons.qr_code,
+            Icons.camera_alt,
             color: Colors.white,
             size: 35,
           ),

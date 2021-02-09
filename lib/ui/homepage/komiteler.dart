@@ -1,5 +1,5 @@
 const komiteIsimler = [
-  "Hepsi",
+  "IEEEMSKU",
   "Computer Society",
   "Communications Society",
   "Power&Enegry Society",
@@ -9,7 +9,7 @@ const komiteIsimler = [
 ];
 
 const komiteLogoPng = [
-  "assets/png/hepsi.png",
+  "assets/png/ieeemsku.png",
   "assets/png/cs.png",
   "assets/png/ea.png",
   "assets/png/pes.png",

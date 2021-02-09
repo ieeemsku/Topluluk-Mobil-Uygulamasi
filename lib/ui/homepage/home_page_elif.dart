@@ -9,11 +9,12 @@ import 'package:stuventmobil/notification_handler.dart';
 import 'package:stuventmobil/ui/Profil/profil.dart';
 import 'package:stuventmobil/ui/Profil/update_password_page.dart';
 import 'package:stuventmobil/ui/homepage/category_widget_elif.dart';
+import 'package:stuventmobil/ui/homepage/event_details_page_elif.dart';
+import 'package:stuventmobil/ui/homepage/event_widget_elif.dart';
 import 'package:stuventmobil/ui/homepage/my_events.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
 import '../const.dart';
-import 'details.dart';
 import 'komiteler.dart';
 
 class HomePage extends StatefulWidget {
@@ -94,10 +95,15 @@ class _HomePageState extends State<HomePage>
                           ),
                           komiteler(size, context),
                           cevreText(),
-                          Container(
-                              height: etkinliklerJpg.length * 350.0,
-                              width: 320,
-                              child: etkinlikler(context)),
+                          FutureBuilder<void>(
+                            future: read(),
+                            builder: (context, sonuc) => Consumer<AppState>(
+                              builder: (context, appState, _) => Container(
+                                  height: events.length * 350.0,
+                                  width: 320,
+                                  child: etkinlikler(context, appState)),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -313,42 +319,33 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget etkinlikler(context) {
-    return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Container(
-          child: Column(
-            children: [
+  Widget etkinlikler(context, AppState appState) {
+    return Container(
+      child: Column(
+        children: [
+          for (final event in events)
+            if (event.categoryIds.contains(appState.selectedCategoryId))
               ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return DetailsPage(
-                          index: index,
-                        );
-                      }));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EventDetailsPage(
+                              event: event,
+                            ),
+                          ));
                     },
-                    child: Hero(
-                      tag: "post" + index.toString(),
-                      child: Image.asset(
-                        "${etkinliklerJpg[index]}",
-                        height: 320,
-                        width: 320,
-                        fit: BoxFit.cover,
-                      ),
+                    child: EventWidget(
+                      event: event,
                     ),
                   )),
-              SizedBox(
-                height: 10,
-              )
-            ],
-          ),
-        );
-      },
-      itemCount: etkinliklerJpg.length,
+          SizedBox(
+            height: 10,
+          )
+        ],
+      ),
     );
   }
 

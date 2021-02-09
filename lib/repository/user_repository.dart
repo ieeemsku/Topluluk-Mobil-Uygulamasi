@@ -108,6 +108,10 @@ class UserRepository implements AuthBase {
     return await _firestoreDBService.readEvents(userId);
   }
 
+  Future<List<dynamic>> readWillEvents(String userId) async {
+    return await _firestoreDBService.readWillEvents(userId);
+  }
+
   Future<bool> sendPasswordResetEmail(String mail) async {
     return await _firebaseAuthService.sendPasswordResetEmail(mail);
   }
@@ -115,6 +119,12 @@ class UserRepository implements AuthBase {
   Future<bool> yoklamaAl(
       String userName, String userID, String eventName) async {
     return await _firestoreDBService.yoklamaAl(userName, userID, eventName);
+  }
+
+  Future<bool> katilacagimEtkinliklerEkle(
+      String userID, String eventName) async {
+    return await _firestoreDBService.katilacagimEtkinliklerEkle(
+        userID, eventName);
   }
 
   Future<bool> updatePassword(String password) async {
@@ -142,5 +152,4 @@ class UserRepository implements AuthBase {
   Future<bool> eventDel(String document) async {
     return await _firestoreDBService.eventDel(document);
   }
-
 }

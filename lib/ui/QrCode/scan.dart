@@ -77,8 +77,8 @@ class _ScanState extends State<ScanScreen> {
 
     String userName = userModel.user.userName + " " + userModel.user.lastName;
     try {
-      bool sonuc = await userModel.yoklamaAl(
-          userName, userModel.user.userID, "CS Toplantısı");
+      bool sonuc =
+          await userModel.yoklamaAl(userName, userModel.user.userID, barcode);
       if (sonuc == true || sonuc == null) {
         PlatformDuyarliAlertDialog(
           baslik: "Yoklama Alındı",

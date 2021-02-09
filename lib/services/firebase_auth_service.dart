@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stuventmobil/model/userC.dart';
 import 'package:stuventmobil/services/auth_base.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthService implements AuthBase {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -74,14 +73,15 @@ class FirebaseAuthService implements AuthBase {
       String mail, String password, bool superUser) async {
     UserCredential sonuc = await _firebaseAuth.createUserWithEmailAndPassword(
         email: mail, password: password);
-    List<String> etkinlikler = [];
+    List<String> katildigimEtkinlikler = [], katilacagimEtkinlikler = [];
     return UserC(
         userID: sonuc.user.uid,
         email: mail,
         userName: name,
         lastName: lastname,
         superUser: superUser,
-        etkinlikler: etkinlikler);
+        katildigimEtkinlikler: katildigimEtkinlikler,
+        katilacagimEtkinlikler: katilacagimEtkinlikler);
   }
 
   @override

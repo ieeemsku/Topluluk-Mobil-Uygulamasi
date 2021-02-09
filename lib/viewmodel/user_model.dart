@@ -166,10 +166,20 @@ class UserModel with ChangeNotifier implements AuthBase {
   }
 
   Future<List<dynamic>> readEvents(String userId) async {
-    try{
-      List<dynamic> myEvents =
-          await _userRepository.readEvents(userId);
+    try {
+      List<dynamic> myEvents = await _userRepository.readEvents(userId);
       return myEvents;
+    } catch (e) {
+      print("user_model hata: " + e.toString());
+      return null;
+    }
+  }
+
+  Future<List<dynamic>> readWillEvents(String userId) async {
+    try {
+      List<dynamic> katilacagimEtkinlikler =
+          await _userRepository.readWillEvents(userId);
+      return katilacagimEtkinlikler;
     } catch (e) {
       print("user_model hata: " + e.toString());
       return null;
@@ -189,6 +199,13 @@ class UserModel with ChangeNotifier implements AuthBase {
   Future<bool> yoklamaAl(
       String userName, String userID, String eventName) async {
     bool sonuc = await _userRepository.yoklamaAl(userName, userID, eventName);
+    return sonuc;
+  }
+
+  Future<bool> katilacagimEtkinliklerEkle(
+      String userID, String eventName) async {
+    bool sonuc =
+        await _userRepository.katilacagimEtkinliklerEkle(userID, eventName);
     return sonuc;
   }
 

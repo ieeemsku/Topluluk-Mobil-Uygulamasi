@@ -9,7 +9,9 @@ abstract class DBBase {
       String collection, String documentName, String alan, dynamic newData);
   Future<List<String>> getEtkinlikler();
   Future<bool> yoklamaAl(String userName, String userID, String eventName);
+  Future<bool> katilacagimEtkinliklerEkle(String userID, String eventName);
   Future<List<String>> readFiles(String anaKlasor, String etkinlikAdi);
   Future<List<dynamic>> readParticipants(String eventName);
   Future<List<dynamic>> readEvents(String userID);
+  Future<List<dynamic>> readWillEvents(String userId);
 }

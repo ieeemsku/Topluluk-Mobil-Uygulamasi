@@ -157,10 +157,9 @@ class NotificationHandler {
           Navigator.push(
               myContext,
               MaterialPageRoute(
-                builder: (context) => EventDetailsPage(
-                  event: event,
-                ),
-              ));
+                  builder: (context) => EventDetailsPage(
+                        event: event,
+                      )));
         } catch (e) {
           print("Hata: $e");
         }

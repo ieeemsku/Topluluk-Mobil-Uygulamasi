@@ -1,365 +1,255 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_document_picker/flutter_document_picker.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:stuventmobil/app/exceptions.dart';
 import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
-import 'package:stuventmobil/model/userC.dart';
-import 'package:stuventmobil/ui/QrCode/generate.dart';
+import 'package:stuventmobil/model/event.dart';
 import 'package:stuventmobil/ui/QrCode/scan.dart';
 import 'package:stuventmobil/ui/event_details/participants_page.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-import '../../model/event.dart';
+import '../const.dart';
 
-class EventDetailsPage extends StatefulWidget {
+class EventDetailsPage extends StatelessWidget {
+  final Function press;
+  var size;
   final Event event;
 
-  const EventDetailsPage({Key key, this.event}) : super(key: key);
-
-  @override
-  _EventDetailsPageState createState() => _EventDetailsPageState();
-}
-
-class _EventDetailsPageState extends State<EventDetailsPage> {
-  bool superU = false;
-  bool _pickFileInProgress = false;
-  Map<String, dynamic> docMap;
-  List<String> docMapKeys = [];
-  bool control = true;
+  EventDetailsPage({Key key, this.press, this.event}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     UserModel _userModel = Provider.of<UserModel>(context);
-    superUser(_userModel, context);
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Center(
-              heightFactor: 1.25,
-              child: Hero(
-                tag: widget.event.title,
-                child: FadeInImage.assetNetwork(
-                  placeholder: "assets/loading.gif",
-                  image: widget.event.imageURL,
-                  height: 300.0,
-                  fit: BoxFit.fitWidth,
-                ),
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              buildHeader(size),
+              SizedBox(
+                height: 150,
               ),
-            ),
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Dosyalar:",
-                            style: TextStyle(color: Colors.red, fontSize: 20),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        for (final keys in docMapKeys)
-                          GestureDetector(
-                            onTap: () async {
-                              if (await canLaunch(docMap[keys])) {
-                                await launch(docMap[keys]);
-                              } else {
-                                debugPrint("Could not launch $docMap[keys]");
-                              }
-                            },
-                            onLongPress: () async {
-                              if (superU) {
-                                _areYouSureforDelete(context, _userModel, keys);
-                              } else {
-                                PlatformDuyarliAlertDialog(
-                                  baslik: "Erişim Hatası",
-                                  icerik:
-                                      "Dosyayı kaldırmak için yetkili değilsiniz",
-                                  anaButonYazisi: "Tamam",
-                                ).goster(context);
-                              }
-                            },
-                            child: Text(
-                              keys,
-                              style:
-                                  TextStyle(color: Colors.green, fontSize: 18),
-                            ),
-                          )
-                      ],
-                    )
-                  ],
-                ),
+              buildBody(size),
+              SizedBox(
+                height: 20,
               ),
-            ),
-            Row(children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: RaisedButton(
-                    color: Color(0xFFFF4700),
-                    textColor: Colors.white,
-                    splashColor: Colors.blueGrey,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ScanScreen()),
-                      );
-                    },
-                    child: const Text('Yoklama al')),
+              buildButtons(size, _userModel, context),
+              SizedBox(
+                height: 20,
               ),
-              if (superU)
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: RaisedButton(
-                      color: Color(0xFFFF4700),
-                      textColor: Colors.white,
-                      splashColor: Colors.blueGrey,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  GenerateScreen(widget.event.title)),
-                        );
-                      },
-                      child: const Text('QR oluştur')),
-                ),
-            ]),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: RaisedButton(
-                  color: Color(0xFFFF4700),
-                  textColor: Colors.white,
-                  splashColor: Colors.blueGrey,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ParticipantsPage(
-                                eventName: widget.event.title,
-                              )),
-                    );
-                  },
-                  child: const Text('Yoklamayı Görüntüle')),
-            ),
-            if (superU)
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: RaisedButton(
-                    color: Colors.red,
-                    textColor: Colors.white,
-                    splashColor: Colors.black,
-                    onPressed: () {
-                      _silmekIcinOnayIste(
-                          context, _userModel, widget.event.title);
-                    },
-                    child: const Text('Etkinliği Kaldır')),
-              ),
-            if (superU)
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: RaisedButton(
-                  color: _pickFileInProgress ? Colors.grey : Colors.green,
-                  textColor: Colors.white,
-                  splashColor: Colors.blueGrey,
-                  onPressed: () {
-                    if (!_pickFileInProgress)
-                      _pickDocument(context, _userModel);
-                  },
-                  child: Text(
-                    _pickFileInProgress ? "Dosya Yükleniyor" : "Dosya Paylaş",
-                  ),
-                ),
-              )
-          ],
+              buildBackAndQr(context)
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Future<void> superUser(UserModel userModel, BuildContext context) async {
-    UserC user = await userModel.currentUser();
-    docMap = widget.event.documentsMap;
-    if (docMap.isNotEmpty) {
-      setState(() {
-        control = false;
-        docMapKeys = docMap.keys.toList();
-      });
-    }
-    setState(() {
-      superU = user.superUser;
-    });
+  Widget buildHeader(Size size) {
+    return Container(
+      height: size.height * 0.25,
+      decoration: BoxDecoration(
+          color: detailsColor,
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              spreadRadius: 2,
+              blurRadius: 7,
+            )
+          ]),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Text(
+              "Ayrıntılar",
+              style: headerText,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
-  _pickDocument(BuildContext context, UserModel userModel) async {
-    String result;
+  buildBody(Size size) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 8.0,
+        ),
+        Stack(
+          overflow: Overflow.visible,
+          children: [
+            Container(
+              height: size.height * 0.25,
+              width: size.width * 0.8,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: detailsColor2,
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Text(
+                    "Buluşma Yeri: " + event.location,
+                    style: miniHeader2,
+                  )
+                ],
+              ),
+            ),
+            Positioned(
+              top: -140,
+              left: 35,
+              child: Container(
+                height: size.height * 0.3,
+                width: size.width * 0.6,
+                child: Hero(
+                    tag: event.title,
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: FadeInImage.assetNetwork(
+                          placeholder: "assets/loading.gif",
+                          image: event.imageURL,
+                          fit: BoxFit.cover,
+                        ))),
+              ),
+            )
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget buildButtons(Size size, UserModel userModel, BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Container(
+          height: 50,
+          width: 150,
+          decoration: BoxDecoration(
+              color: detailsColor, borderRadius: BorderRadius.circular(20)),
+          child: Center(
+            child: GestureDetector(
+              child: Text(
+                "Katılıyorum",
+                style: miniHeader2,
+              ),
+              onTap: () {
+                katiliyorum(userModel, event.title, context);
+              },
+            ),
+          ),
+        ),
+        Container(
+          height: 50,
+          width: 150,
+          decoration: BoxDecoration(
+              color: detailsColor, borderRadius: BorderRadius.circular(20)),
+          child: Center(
+            child: GestureDetector(
+              child: Text(
+                "Kimler Katılıyor?",
+                style: miniHeader2,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ParticipantsPage(
+                            eventName: event.title,
+                          )),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildBackAndQr(context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            child: Row(
+              children: [
+                Icon(
+                  Icons.arrow_back,
+                  color: detailsColor,
+                ),
+                Text(
+                  "Geri",
+                  style: TextStyle(color: detailsColor, fontSize: 20),
+                )
+              ],
+            ),
+          ),
+        ),
+        Container(
+          height: 50,
+          width: 50,
+          decoration: BoxDecoration(
+              gradient: indigoButton, borderRadius: BorderRadius.circular(10)),
+          child: GestureDetector(
+            child: Icon(
+              Icons.camera_alt,
+              color: Colors.white,
+              size: 35,
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ScanScreen()),
+              );
+            },
+          ),
+        ),
+        SizedBox(
+          width: 50,
+        ),
+      ],
+    );
+  }
+
+  Future<void> katiliyorum(
+      UserModel userModel, String eventName, BuildContext context) async {
     try {
-      setState(() {
-        _pickFileInProgress = true;
-      });
-
-      result = await FlutterDocumentPicker.openDocument();
-      File file = new File(result);
-      String fileName = file.path.split("/").removeLast();
-
-      String url = await userModel.uploadFile(
-          "Etkinlikler", file, widget.event.title, fileName);
-
-      docMap[fileName] = url;
-
-      bool sonuc = await userModel
-          .update("Etkinlikler", widget.event.title, "Dosyalar", docMap)
-          .catchError((onError) {
+      bool sonuc = await userModel.katilacagimEtkinliklerEkle(
+          userModel.user.userID, eventName);
+      if (sonuc == true || sonuc == null) {
         PlatformDuyarliAlertDialog(
-          baslik: "Dosyalar Güncellenemedi",
-          icerik: "Dosya güncellenirken hata oluştu\n" + onError.toString(),
+          baslik: "Katılacağım Etkinlikler Listesi Güncellendi",
+          icerik: "Katılacağım Etkinlikler Listesi başarıyla güncellendi",
           anaButonYazisi: "Tamam",
         ).goster(context);
-      });
-      if (sonuc || sonuc == null) {
-        PlatformDuyarliAlertDialog(
-          baslik: "Dosya Eklendi",
-          icerik: "Dosya başarılı bir şekilde eklendi",
-          anaButonYazisi: "Tamam",
-        ).goster(context);
-
-        setState(() {
-          control = false;
-          docMapKeys = docMap.keys.toList();
-        });
       } else {
         PlatformDuyarliAlertDialog(
-          baslik: "Dosyalar Güncellenemedi",
-          icerik: "Dosya güncellenirken hata oluştu",
+          baslik: "Katılacağım Etkinlikler Listesi Güncellenemedi 😕",
+          icerik:
+              "Katılacağım Etkinlikler Listesi güncellenirken bir sorun oluştu.\n" +
+                  "İnternet bağlantınızı kontrol edin.",
           anaButonYazisi: "Tamam",
         ).goster(context);
-        print("sonuc: " + sonuc.toString());
       }
-    } catch (e) {
+    } on PlatformException catch (e) {
       PlatformDuyarliAlertDialog(
-        baslik: "Dosyalar Güncellenemedi",
-        icerik: e.toString(),
+        baslik: "Katılacağım Etkinlikler Listesi Güncelleme HATA",
+        icerik: Exceptions.goster(e.code),
         anaButonYazisi: "Tamam",
       ).goster(context);
-    } finally {
-      setState(() {
-        _pickFileInProgress = false;
-      });
-    }
-  }
-
-  Future<void> _silmekIcinOnayIste(
-      BuildContext context, UserModel userModel, String document) async {
-    final sonuc = await PlatformDuyarliAlertDialog(
-      baslik: "Emin Misiniz?",
-      icerik: "Etkinliği Kaldırmak istediğinizden emin misiniz?",
-      anaButonYazisi: "Evet",
-      iptalButonYazisi: "Vazgeç",
-    ).goster(context);
-
-    if (sonuc) {
-      _delEvent(context, userModel, document);
-    }
-  }
-
-  Future<void> _delEvent(
-      BuildContext context, UserModel userModel, String document) async {
-    try {
-      await userModel
-          .delEvent("Etkinlikler", widget.event.title)
-          .then((value) async {
-        bool sonuc = await userModel.eventDel(document);
-        if (sonuc == true || sonuc == null) {
-          final sonuc1 = await PlatformDuyarliAlertDialog(
-            baslik: "Etkinlik Kaldırıldı",
-            icerik: "Etkinlik başarıyla kaldırıldı",
-            anaButonYazisi: "Tamam",
-          ).goster(context);
-          if (sonuc1) {
-            Navigator.pop(context);
-          }
-        } else {
-          PlatformDuyarliAlertDialog(
-            baslik: "Etkinlik Kaldırılırken Sorun",
-            icerik: "Etkinlik kaldırılırken bir sorun oluştu ",
-            anaButonYazisi: "Tamam",
-          ).goster(context);
-        }
-      });
-    } catch (e) {
-      PlatformDuyarliAlertDialog(
-        baslik: "Etkinlik Kaldırılırken Sorun",
-        icerik: "Etkinlik kaldırılırken bir sorun oluştu: $e ",
-        anaButonYazisi: "Tamam",
-      ).goster(context);
-    }
-  }
-
-  Future<void> _areYouSureforDelete(
-      BuildContext context, UserModel userModel, String fileName) async {
-    final sonuc = await PlatformDuyarliAlertDialog(
-      baslik: "Emin Misiniz?",
-      icerik: "Dosyayı kaldırmak istediğinizden emin misiniz?",
-      anaButonYazisi: "Evet",
-      iptalButonYazisi: "Vazgeç",
-    ).goster(context);
-
-    if (sonuc) {
-      _deleteFile(context, userModel, fileName);
-    }
-  }
-
-  Future<void> _deleteFile(
-      BuildContext context, UserModel userModel, String fileName) async {
-    try {
-      docMap.remove(fileName);
-
-      await userModel
-          .deleteFile("Etkinlikler", widget.event.title, fileName)
-          .then((value) {
-        userModel
-            .update("Etkinlikler", widget.event.title, "Dosyalar", docMap)
-            .then((value) {
-          PlatformDuyarliAlertDialog(
-            baslik: "Dosya Kaldırıldı",
-            icerik: "Dosya başarılı bir şekilde kaldırıldı",
-            anaButonYazisi: "Tamam",
-          ).goster(context);
-          setState(() {
-            docMapKeys = docMap.keys.toList();
-          });
-        }).catchError((onError) {
-          PlatformDuyarliAlertDialog(
-            baslik: "Dosya Kaldırılamadı",
-            icerik: "Dosya kaldırılırken bir sorun oluştu\n" +
-                "İnternet bağlantınızı kontrol edin\n" +
-                "Hata: $onError",
-            anaButonYazisi: "Tamam",
-          ).goster(context);
-        });
-      }).catchError((onError) {
-        PlatformDuyarliAlertDialog(
-          baslik: "Dosya Kaldırılamadı",
-          icerik: "Dosya kaldırılırken bir sorun oluştu\n" +
-              "İnternet bağlantınızı kontrol edin\n" +
-              "Hata: $onError",
-          anaButonYazisi: "Tamam",
-        ).goster(context);
-      });
-    } catch (e) {
-      print("deleteFile hata:" + e.toString());
     }
   }
 }

@@ -1,4 +1,5 @@
 const komiteIsimler = [
+  "Hepsi",
   "Computer Society",
   "Communications Society",
   "Power&Enegry Society",
@@ -8,12 +9,13 @@ const komiteIsimler = [
 ];
 
 const komiteLogoPng = [
+  "assets/png/hepsi.png",
   "assets/png/cs.png",
-  "assets/png/comsoc.png",
+  "assets/png/ea.png",
   "assets/png/pes.png",
   "assets/png/ras.png",
-  "assets/png/ea.png",
   "assets/png/wie.png",
+  "assets/png/comsoc.png",
 ];
 
 const etkinliklerJpg = [

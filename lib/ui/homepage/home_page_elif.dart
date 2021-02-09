@@ -8,6 +8,7 @@ import 'package:stuventmobil/model/userC.dart';
 import 'package:stuventmobil/notification_handler.dart';
 import 'package:stuventmobil/ui/Profil/profil.dart';
 import 'package:stuventmobil/ui/Profil/update_password_page.dart';
+import 'package:stuventmobil/ui/homepage/category_widget_elif.dart';
 import 'package:stuventmobil/ui/homepage/my_events.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
@@ -88,10 +89,10 @@ class _HomePageState extends State<HomePage>
                             height: 25,
                           ),
                           komiteHeader(),
-                          komiteler(size, context),
                           SizedBox(
-                            height: 15,
+                            height: 10,
                           ),
+                          komiteler(size, context),
                           cevreText(),
                           Container(
                               height: etkinliklerJpg.length * 350.0,
@@ -275,41 +276,27 @@ class _HomePageState extends State<HomePage>
 
   Widget komiteler(Size size, context) {
     return Container(
-      height: 150,
-      child: ListView.builder(
-        itemCount: komiteIsimler.length,
-        itemBuilder: (context, index) {
-          return Row(
-            children: [
-              SizedBox(
-                width: 10,
-              ),
-              Container(
-                height: size.height * 0.15,
-                width: size.width * 0.45,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
+      height: 140,
+      child: Consumer<AppState>(
+        builder: (context, appState, _) => ListView.builder(
+          itemCount: komiteIsimler.length,
+          itemBuilder: (context, index) {
+            return Row(
+              children: [
+                SizedBox(
+                  width: 10,
                 ),
-                child: Column(
-                  children: [
-                    Center(
-                      child: Image.asset(
-                        "${komiteLogoPng[index]}",
-                        height: size.height * 0.15,
-                        width: size.width * 0.4,
-                      ),
-                    ),
-                  ],
+                CategoryWidget(
+                  categoryId: index,
                 ),
-              ),
-              SizedBox(
-                width: 10,
-              )
-            ],
-          );
-        },
-        scrollDirection: Axis.horizontal,
+                SizedBox(
+                  width: 10,
+                )
+              ],
+            );
+          },
+          scrollDirection: Axis.horizontal,
+        ),
       ),
     );
   }

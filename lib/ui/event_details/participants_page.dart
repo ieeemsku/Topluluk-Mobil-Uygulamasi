@@ -61,6 +61,9 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
   Future<void> readParticipants(UserModel userModel, String eventName) async {
     try {
       participants = await userModel.readParticipants(eventName);
+      setState(() {
+        participants = participants;
+      });
     } catch (e) {
       print("readParticipants hata: " + e.toString());
     }

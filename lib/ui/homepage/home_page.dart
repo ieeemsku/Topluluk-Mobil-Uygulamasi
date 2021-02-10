@@ -1,24 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuventmobil/app_state.dart';
 import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
-import 'package:stuventmobil/model/category.dart';
+import 'package:stuventmobil/configuration.dart';
 import 'package:stuventmobil/model/event.dart';
 import 'package:stuventmobil/model/userC.dart';
 import 'package:stuventmobil/notification_handler.dart';
-import 'package:stuventmobil/styleguide.dart';
 import 'package:stuventmobil/ui/Profil/profil.dart';
 import 'package:stuventmobil/ui/Profil/update_password_page.dart';
-import 'package:stuventmobil/ui/event_details/event_details_page.dart';
+import 'package:stuventmobil/ui/homepage/category_widget.dart';
+import 'package:stuventmobil/ui/homepage/event_widget.dart';
 import 'package:stuventmobil/ui/homepage/my_events.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
-import '../../configuration.dart';
-import 'category_widget.dart';
-import 'event_widget.dart';
+import 'file:///C:/Users/HAKKICAN/AndroidStudioProjects/Topluluk-Mobil-Uygulamasi/lib/ui/event_details/event_details_page.dart';
 
-final TextStyle menuFontStyle = TextStyle(color: Colors.black, fontSize: 18);
+import '../const.dart';
+import 'komiteler.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -27,6 +25,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
+  var size;
   double ekranYuksekligi, ekranGenisligi;
 
   bool menuAcikMi = false;
@@ -34,8 +33,6 @@ class _HomePageState extends State<HomePage>
   AnimationController _controller;
   Animation<Offset> _menuOffsetAnimation;
   final Duration _duration = Duration(milliseconds: 300);
-
-  final color = Color(0xFFFF4700);
 
   String name = "";
 
@@ -53,131 +50,59 @@ class _HomePageState extends State<HomePage>
 
   @override
   void dispose() {
+    // TODO: implement dispose
     super.dispose();
     _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    ekranGenisligi = MediaQuery.of(context).size.width;
-    ekranYuksekligi = MediaQuery.of(context).size.height;
+    size = MediaQuery.of(context).size;
+    ekranGenisligi = size.width;
+    ekranYuksekligi = size.height;
 
-    return Scaffold(
-      body: ChangeNotifierProvider<AppState>(
-        create: (_) => AppState(),
-        child: SafeArea(
-          child: Stack(
-            children: <Widget>[
-              menuOlustur(context),
-              // HomePageBackground(
-              //   screenHide: ekranYuksekligi,
-              // ),
-              AnimatedPositioned(
-                top: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
-                bottom: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
-                left: menuAcikMi ? 0.5 * ekranGenisligi : 0,
-                right: menuAcikMi ? -0.4 * ekranGenisligi : 0,
-                duration: _duration,
-                child: RefreshIndicator(
-                  onRefresh: read,
-                  child: Material(
-                    elevation: 8,
-                    color: color,
-                    child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
+    return ChangeNotifierProvider<AppState>(
+      create: (_) => AppState(),
+      child: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            menuOlustur(context),
+            AnimatedPositioned(
+              top: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
+              bottom: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
+              left: menuAcikMi ? 0.5 * ekranGenisligi : 0,
+              right: menuAcikMi ? -0.4 * ekranGenisligi : 0,
+              duration: _duration,
+              child: RefreshIndicator(
+                onRefresh: read,
+                child: Container(
+                  decoration: BoxDecoration(gradient: homePageBg),
+                  child: Scaffold(
+                    resizeToAvoidBottomInset: true,
+                    backgroundColor: Colors.transparent,
+                    body: SingleChildScrollView(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: (ekranGenisligi / 30)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                InkWell(
-                                  onTap: () {
-                                    menuAcikMiDegistir();
-                                  },
-                                  child: Icon(
-                                    Icons.menu,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  "STUVENT ETKİNLİK HABERCİSİ",
-                                  style: fadedTextStyle,
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.person,
-                                    color: Color(0x99FFFFFF),
-                                  ),
-                                  tooltip: "Profil Ayarları",
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Profil()),
-                                    );
-                                  },
-                                )
-                              ],
-                            ),
+                        children: [
+                          SizedBox(
+                            height: 30,
                           ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 32.0),
-                            child: Text(
-                              "Çevrendeki Etkinliklere Gözat 🥳",
-                              style: whiteHeadingTextStyle,
-                              textAlign: TextAlign.center,
-                            ),
+                          header(),
+                          SizedBox(
+                            height: 25,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 24.0),
-                            child: Consumer<AppState>(
-                              builder: (context, appState, _) =>
-                                  SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: <Widget>[
-                                    for (final category in categories)
-                                      CategoryWidget(category: category)
-                                  ],
-                                ),
-                              ),
-                            ),
+                          komiteHeader(),
+                          SizedBox(
+                            height: 10,
                           ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: FutureBuilder<void>(
-                              future: read(),
-                              builder: (context, sonuc) => Consumer<AppState>(
-                                builder: (context, appState, _) => Column(
-                                  children: <Widget>[
-                                    for (final event in events)
-                                      if (event.categoryIds.contains(
-                                          appState.selectedCategoryId))
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EventDetailsPage(
-                                                    event: event,
-                                                  ),
-                                                ));
-                                          },
-                                          child: EventWidget(
-                                            event: event,
-                                          ),
-                                        )
-                                  ],
-                                ),
-                              ),
+                          komiteler(size, context),
+                          cevreText(),
+                          FutureBuilder<void>(
+                            future: read(),
+                            builder: (context, sonuc) => Consumer<AppState>(
+                              builder: (context, appState, _) => Container(
+                                  height: events.length * 350.0,
+                                  width: 320,
+                                  child: etkinlikler(context, appState)),
                             ),
                           ),
                         ],
@@ -186,8 +111,8 @@ class _HomePageState extends State<HomePage>
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -229,9 +154,10 @@ class _HomePageState extends State<HomePage>
                       Text(
                         "Bölüm",
                         style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.white60),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w300,
+                          color: Colors.white60,
+                        ),
                       ),
                     ],
                   ),
@@ -253,19 +179,19 @@ class _HomePageState extends State<HomePage>
                           children: <Widget>[
                             FlatButton.icon(
                                 onPressed: () {
-                                  if (e['title'] == 'Etkinliklerim') {
+                                  if (e['title'] == "Etkinliklerim") {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => MyEvents()),
                                     );
-                                  } else if (e['title'] == 'Profil') {
+                                  } else if (e['title'] == "Profil") {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => Profil()),
                                     );
-                                  } else if (e['title'] == 'Şifremi Güncelle') {
+                                  } else if (e['title'] == "Şifremi Güncelle") {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -319,15 +245,109 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  void menuAcikMiDegistir() {
-    setState(() {
-      if (menuAcikMi) {
-        _controller.reverse();
-      } else {
-        _controller.forward();
-      }
-      menuAcikMi = !menuAcikMi;
-    });
+  Widget header() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        InkWell(
+          onTap: () {
+            menuAcikMiDegistir();
+          },
+          child: Icon(
+            Icons.menu,
+            color: Colors.white,
+          ),
+        ),
+        Text(
+          "Stuvent",
+          style: headerText,
+        ),
+        SizedBox(
+          width: 25,
+        ),
+      ],
+    );
+  }
+
+  Widget komiteHeader() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Komiteler",
+          style: headerText2,
+        )
+      ],
+    );
+  }
+
+  Widget komiteler(Size size, context) {
+    return Container(
+      height: 140,
+      child: Consumer<AppState>(
+        builder: (context, appState, _) => ListView.builder(
+          itemCount: komiteIsimler.length,
+          itemBuilder: (context, index) {
+            return Row(
+              children: [
+                SizedBox(
+                  width: 10,
+                ),
+                CategoryWidget(
+                  categoryId: index,
+                ),
+                SizedBox(
+                  width: 10,
+                )
+              ],
+            );
+          },
+          scrollDirection: Axis.horizontal,
+        ),
+      ),
+    );
+  }
+
+  cevreText() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Çevrenizdeki Etkinlikler",
+          style: headerText2,
+        ),
+      ],
+    );
+  }
+
+  Widget etkinlikler(context, AppState appState) {
+    return Container(
+      child: Column(
+        children: [
+          for (final event in events)
+            if (event.categoryIds.contains(appState.selectedCategoryId))
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EventDetailsPage(
+                              event: event,
+                            ),
+                          ));
+                    },
+                    child: EventWidget(
+                      event: event,
+                    ),
+                  )),
+          SizedBox(
+            height: 10,
+          )
+        ],
+      ),
+    );
   }
 
   Future<void> currentUser() async {
@@ -340,15 +360,6 @@ class _HomePageState extends State<HomePage>
     });
   }
 
-  Future<void> _cikisyap(BuildContext context) async {
-    try {
-      UserModel userModel = Provider.of<UserModel>(context, listen: false);
-      await userModel.signOut();
-    } catch (e) {
-      print("sign out hata:" + e.toString());
-    }
-  }
-
   Future<void> _cikisIcinOnayIste(BuildContext context) async {
     final sonuc = await PlatformDuyarliAlertDialog(
       baslik: "Emin Misiniz?",
@@ -358,7 +369,27 @@ class _HomePageState extends State<HomePage>
     ).goster(context);
 
     if (sonuc) {
-      _cikisyap(context);
+      _cikisYap(context);
     }
+  }
+
+  Future<void> _cikisYap(BuildContext context) async {
+    try {
+      UserModel userModel = Provider.of<UserModel>(context, listen: false);
+      await userModel.signOut();
+    } catch (e) {
+      print("sign out hata: " + e.toString());
+    }
+  }
+
+  void menuAcikMiDegistir() {
+    setState(() {
+      if (menuAcikMi) {
+        _controller.reverse();
+      } else {
+        _controller.forward();
+      }
+      menuAcikMi = !menuAcikMi;
+    });
   }
 }

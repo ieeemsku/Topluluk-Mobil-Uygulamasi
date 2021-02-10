@@ -95,25 +95,35 @@ class FirestoreDBService implements DBBase {
         await _firebaseDB.collection("Users").doc(userId).get();
 
     Map<String, dynamic> data = docSnapshot.data();
-    List<dynamic> myEvents = data["Etkinlikler"];
+    List<dynamic> myEvents = data["katildigimEtkinlikler"];
 
     return myEvents;
+  }
+
+  @override
+  Future<List<dynamic>> readWillEvents(String userId) async {
+    DocumentSnapshot documentSnapshot =
+        await _firebaseDB.collection("Users").doc(userId).get();
+
+    Map<String, dynamic> data = documentSnapshot.data();
+    List<dynamic> katilacagimEtkinlikler = data["katilacagimEtkinlikler"];
+
+    return katilacagimEtkinlikler;
   }
 
   @override
   Future<bool> yoklamaAl(String userName, String userID, String eventName) {
     DocumentReference eventRef = _firebaseDB.doc("Users/$userID");
 
-    List etkinlik;
+    List katildigimEtkinlikler;
     _firebaseDB.runTransaction((Transaction transaction) async {
       DocumentSnapshot eventData = await eventRef.get();
       Map<String, dynamic> data = eventData.data();
-      etkinlik = data["Etkinlikler"];
-      if (!etkinlik.contains(eventName)) {
-        etkinlik.add(eventName);
-        transaction.update(eventRef, {"Etkinlikler": etkinlik});
-      } else {
-        return Future.value(false);
+      katildigimEtkinlikler = data["katildigimEtkinlikler"];
+      if (!katildigimEtkinlikler.contains(eventName)) {
+        katildigimEtkinlikler.add(eventName);
+        transaction
+            .update(eventRef, {"katildigimEtkinlikler": katildigimEtkinlikler});
       }
     });
 
@@ -127,11 +137,29 @@ class FirestoreDBService implements DBBase {
       if (!katilimcilar.contains(userName)) {
         katilimcilar.add(userName);
         transaction.update(eventRef1, {"Katilimcilar": katilimcilar});
-        return Future.value(true);
-      } else {
-        return Future.value(false);
       }
     });
+
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> katilacagimEtkinliklerEkle(String userID, String eventName) {
+    DocumentReference documentReference = _firebaseDB.doc("Users/$userID");
+
+    List katilacagimEtkinlikler;
+    _firebaseDB.runTransaction((Transaction transaction) async {
+      DocumentSnapshot documentSnapshot = await documentReference.get();
+      Map<String, dynamic> data = documentSnapshot.data();
+      katilacagimEtkinlikler = data["katilacagimEtkinlikler"];
+      if (!katilacagimEtkinlikler.contains(eventName)) {
+        katilacagimEtkinlikler.add(eventName);
+        transaction.update(documentReference,
+            {"katilacagimEtkinlikler": katilacagimEtkinlikler});
+      }
+    });
+
+    return Future.value(true);
   }
 
   @override

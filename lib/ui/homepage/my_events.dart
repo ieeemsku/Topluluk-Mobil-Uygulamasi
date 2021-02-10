@@ -10,7 +10,7 @@ class MyEvents extends StatefulWidget {
 }
 
 class _MyEventsState extends State<MyEvents> {
-  List<dynamic> myEvents = [];
+  List<dynamic> katildigimEtkinlikler = [], katilacagimEtkinlikler = [];
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class _MyEventsState extends State<MyEvents> {
       appBar: AppBar(
         title: Text("Etkinliklerim"),
       ),
-      body: myEvents.length == 0
+      body: katildigimEtkinlikler.length == 0
           ? MerkezWidget(
               children: [
                 Image.asset(
@@ -58,10 +58,11 @@ class _MyEventsState extends State<MyEvents> {
                         future: readEvents(),
                         builder: (context, sonuc) => Column(
                           children: <Widget>[
-                            for (final myEvent in myEvents)
+                            for (final myEvent in katildigimEtkinlikler)
                               ListTile(
                                 leading: Text(
-                                  (myEvents.indexOf(myEvent) + 1).toString(),
+                                  (katildigimEtkinlikler.indexOf(myEvent) + 1)
+                                      .toString(),
                                   style: TextStyle(fontSize: 20),
                                 ),
                                 title: Text(
@@ -88,10 +89,11 @@ class _MyEventsState extends State<MyEvents> {
                         future: readEvents(),
                         builder: (context, sonuc) => Column(
                           children: <Widget>[
-                            for (final myEvent in myEvents)
+                            for (final myEvent in katilacagimEtkinlikler)
                               ListTile(
                                 leading: Text(
-                                  (myEvents.indexOf(myEvent) + 1).toString(),
+                                  (katilacagimEtkinlikler.indexOf(myEvent) + 1)
+                                      .toString(),
                                   style: TextStyle(fontSize: 20),
                                 ),
                                 title: Text(
@@ -115,7 +117,8 @@ class _MyEventsState extends State<MyEvents> {
       UserModel userModel = Provider.of<UserModel>(context);
       UserC userC = await userModel.currentUser();
       String userId = userC.userID;
-      myEvents = await userModel.readEvents(userId);
+      katildigimEtkinlikler = await userModel.readEvents(userId);
+      katilacagimEtkinlikler = await userModel.readWillEvents(userId);
     } catch (e) {
       print("readEvents hata: " + e.toString());
     }

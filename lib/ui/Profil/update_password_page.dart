@@ -12,6 +12,7 @@ class ChangePassword extends StatelessWidget {
   static Key key1 = new GlobalKey();
   static Key key2 = new GlobalKey();
   static Key key3 = new GlobalKey();
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String mail, oldPassword, newPassword;
 
@@ -23,6 +24,7 @@ class ChangePassword extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
+        key: _scaffoldKey,
         body: Column(
           children: [buildingHeaderAndTextForm(context), buildingBack(context)],
         ));
@@ -235,50 +237,58 @@ class ChangePassword extends StatelessWidget {
   }
 
   Future<void> _updatePassword(BuildContext context) async {
-    PlatformDuyarliAlertDialog(
-      baslik: "Şifreniz Güncelleniyor...",
-      icerik: "Lütfen şifreniz güncelenirken bekleyiniz 😉",
-      anaButonYazisi: "Tamam",
-    ).goster(context);
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text("Şifreniz Güncelleniyor..."),
+      duration: Duration(seconds: 3),
+    ));
 
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
 
       UserModel _userModel = Provider.of<UserModel>(context, listen: false);
+      String userMail = _userModel.user.email;
       try {
-        await _userModel
-            .signInWithEmailandPassword(mail, oldPassword)
-            .then((value) async {
-          bool sonuc = await _userModel.sifreGuncelle(newPassword);
-          if (sonuc == true || sonuc == null) {
-            var sonuc1 = await PlatformDuyarliAlertDialog(
-              baslik: "Şifreniz Güncellendi 👍",
-              icerik: "Şifreniz başarılı bir şekilde güncellendi",
+        if (userMail == mail) {
+          await _userModel
+              .signInWithEmailandPassword(mail, oldPassword)
+              .then((value) async {
+            bool sonuc = await _userModel.sifreGuncelle(newPassword);
+            if (sonuc == true || sonuc == null) {
+              var sonuc1 = await PlatformDuyarliAlertDialog(
+                baslik: "Şifreniz Güncellendi 👍",
+                icerik: "Şifreniz başarılı bir şekilde güncellendi",
+                anaButonYazisi: "Tamam",
+              ).goster(context);
+
+              if (sonuc1) {
+                Navigator.pop(context);
+              }
+            } else {
+              final sonuc = await PlatformDuyarliAlertDialog(
+                baslik: "Şifreniz Güncellenemedi 😕",
+                icerik: "Şifreniz güncellenirken bir sorun oluştu.\n" +
+                    "İnternet bağlantınızı kontrol edin",
+                anaButonYazisi: "Tamam",
+              ).goster(context);
+
+              if (sonuc) {
+                Navigator.pop(context);
+              }
+            }
+          }).catchError((e) {
+            PlatformDuyarliAlertDialog(
+              baslik: "Şifre Güncelleme HATA",
+              icerik: Exceptions.goster(e.toString()),
               anaButonYazisi: "Tamam",
             ).goster(context);
-
-            if (sonuc1) {
-              Navigator.pop(context);
-            }
-          } else {
-            final sonuc = await PlatformDuyarliAlertDialog(
-              baslik: "Şifreniz Güncellenemedi 😕",
-              icerik: "Şifreniz güncellenirken bir sorun oluştu.\n" +
-                  "İnternet bağlantınızı kontrol edin",
-              anaButonYazisi: "Tamam",
-            ).goster(context);
-
-            if (sonuc) {
-              Navigator.pop(context);
-            }
-          }
-        }).catchError((e) {
+          });
+        } else {
           PlatformDuyarliAlertDialog(
-            baslik: "Şifre Güncelleme HATA",
-            icerik: Exceptions.goster(e.toString()),
+            baslik: "Girilen E-Posta Adresi HATA",
+            icerik: "Kendi e-posta adresinizi doğru girdiğinizden emin olun",
             anaButonYazisi: "Tamam",
           ).goster(context);
-        });
+        }
       } on PlatformException catch (e) {
         PlatformDuyarliAlertDialog(
           baslik: "Şifre Güncelleme HATA",

@@ -7,7 +7,8 @@ class UserC {
   String lastName;
   String profilURL;
   bool superUser = false;
-  List<dynamic> etkinlikler;
+  List<dynamic> katildigimEtkinlikler;
+  List<dynamic> katilacagimEtkinlikler;
 
   UserC(
       {@required this.userID,
@@ -15,14 +16,16 @@ class UserC {
       this.userName,
       this.lastName,
       this.superUser,
-      this.etkinlikler});
+      this.katildigimEtkinlikler,
+      this.katilacagimEtkinlikler});
 
   Map<String, dynamic> toMap() {
     return {
       'Ad': userName,
       "Soyad": lastName,
       'E-mail': email,
-      'Etkinlikler': etkinlikler,
+      'Katıldığım Etkinlikler': katildigimEtkinlikler,
+      'Katılacağım Etkinlikler': katilacagimEtkinlikler,
       'SuperUser': superUser,
       "UserID": userID
     };
@@ -34,7 +37,8 @@ class UserC {
         userName = map['Ad'],
         lastName = map["Soyad"],
         superUser = map["SuperUser"],
-        etkinlikler = map["Etkinlikler"];
+        katildigimEtkinlikler = map["katildigimEtkinlikler"],
+        katilacagimEtkinlikler = map["katilacagimEtkinlikler"];
   //profilURL = map['profilURL'],
 
   UserC.idveResim({@required this.userID, @required this.profilURL});

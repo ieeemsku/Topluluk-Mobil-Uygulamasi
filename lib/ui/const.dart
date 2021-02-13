@@ -159,3 +159,5 @@ const blueBotton = LinearGradient(
       Color.fromRGBO(141, 211, 212, 1),
       Color.fromRGBO(141, 211, 225, 1),
     ]);
+
+const qrColor = Color.fromRGBO(242, 210, 242, 1);

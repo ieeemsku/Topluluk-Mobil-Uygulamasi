@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:topluluk_tasarim/Pages/home_page.dart';
 
 const detailsColor = Color.fromRGBO(151, 175, 255, 1);
 const detailsColor2 = Color.fromRGBO(213, 217, 255, 1);
@@ -7,7 +6,7 @@ const detailsColor2 = Color.fromRGBO(213, 217, 255, 1);
 const headerText = TextStyle(
     fontFamily: "Ubuntu",
     color: Colors.white,
-    fontSize: 40,
+    fontSize: 42,
     fontWeight: FontWeight.bold,
     shadows: <Shadow>[
       Shadow(
@@ -60,13 +59,13 @@ var indigoButton = LinearGradient(
     end: Alignment.bottomLeft,
     stops: <double>[
       0.1,
-      0.4,
+      0.5,
       0.9
     ],
     colors: [
-      Color.fromRGBO(74, 78, 217, 1),
+      Color.fromRGBO(206, 210, 242, 1),
       Color.fromRGBO(138, 149, 243, 1),
-      Color.fromRGBO(255, 255, 255, 1),
+      Color.fromRGBO(124, 127, 225, 1)
     ]);
 var detailsButton = LinearGradient(
     begin: Alignment.topRight,
@@ -107,13 +106,13 @@ const createAccBg = LinearGradient(
     end: Alignment.bottomLeft,
     stops: [
       0.1,
-      0.4,
+      0.5,
       0.9
     ],
     colors: [
       Color.fromRGBO(255, 255, 252, 1),
       Color.fromRGBO(255, 241, 151, 1),
-      Color.fromRGBO(232, 234, 242, 1),
+      Color.fromRGBO(250, 164, 26, 1)
     ]);
 const orangeButton = LinearGradient(
     begin: Alignment.topRight,
@@ -137,12 +136,14 @@ const new_event_color_button = LinearGradient(
     begin: Alignment.topRight,
     end: Alignment.bottomLeft,
     stops: [
+      0.1,
       0.4,
-      0.8,
+      0.9
     ],
     colors: [
       Color.fromRGBO(30, 227, 167, 1),
       Color.fromRGBO(220, 247, 239, 1),
+      Color.fromRGBO(250, 164, 26, 1)
     ]);
 
 const blueBotton = LinearGradient(
@@ -158,3 +159,5 @@ const blueBotton = LinearGradient(
       Color.fromRGBO(141, 211, 212, 1),
       Color.fromRGBO(141, 211, 225, 1),
     ]);
+
+const qrColor = Color.fromRGBO(242, 210, 242, 1);

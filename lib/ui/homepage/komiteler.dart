@@ -11,11 +11,11 @@ const komiteIsimler = [
 const komiteLogoPng = [
   "assets/png/ieeemsku.png",
   "assets/png/cs.png",
-  "assets/png/ea.png",
+  "assets/png/comsoc.png",
   "assets/png/pes.png",
   "assets/png/ras.png",
+  "assets/png/ea.png",
   "assets/png/wie.png",
-  "assets/png/comsoc.png",
 ];
 
 const etkinliklerJpg = [

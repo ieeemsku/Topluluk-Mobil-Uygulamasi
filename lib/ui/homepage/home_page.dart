@@ -64,55 +64,60 @@ class _HomePageState extends State<HomePage>
     return ChangeNotifierProvider<AppState>(
       create: (_) => AppState(),
       child: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            menuOlustur(context),
-            AnimatedPositioned(
-              top: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
-              bottom: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
-              left: menuAcikMi ? 0.5 * ekranGenisligi : 0,
-              right: menuAcikMi ? -0.4 * ekranGenisligi : 0,
-              duration: _duration,
-              child: RefreshIndicator(
-                onRefresh: read,
-                child: Container(
-                  decoration: BoxDecoration(gradient: homePageBg),
-                  child: Scaffold(
-                    resizeToAvoidBottomInset: true,
-                    backgroundColor: Colors.transparent,
-                    body: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 30,
-                          ),
-                          header(),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          komiteHeader(),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          komiteler(size, context),
-                          cevreText(),
-                          FutureBuilder<void>(
-                            future: read(),
-                            builder: (context, sonuc) => Consumer<AppState>(
-                              builder: (context, appState, _) => Container(
-                                  height: events.length * 350.0,
-                                  width: 320,
-                                  child: etkinlikler(context, appState)),
+        child: Scaffold(
+          body: Stack(
+            children: <Widget>[
+              menuOlustur(context),
+              AnimatedPositioned(
+                top: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
+                bottom: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
+                left: menuAcikMi ? 0.6 * ekranGenisligi : 0,
+                right: menuAcikMi ? -0.55 * ekranGenisligi : 0,
+                duration: _duration,
+                child: RefreshIndicator(
+                  onRefresh: read,
+                  child: Container(
+                    decoration: BoxDecoration(gradient: homePageBg),
+                    child: Scaffold(
+                      resizeToAvoidBottomInset: true,
+                      backgroundColor: Colors.transparent,
+                      body: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 30,
                             ),
-                          ),
-                        ],
+                            header(),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            komiteHeader(),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            komiteler(size, context),
+                            cevreText(),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            FutureBuilder<void>(
+                              future: read(),
+                              builder: (context, sonuc) => Consumer<AppState>(
+                                builder: (context, appState, _) => Container(
+                                    height: events.length * 350.0,
+                                    width: 320,
+                                    child: etkinlikler(context, appState)),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -129,39 +134,44 @@ class _HomePageState extends State<HomePage>
             Container(
               margin: EdgeInsets.symmetric(
                 horizontal: 5,
-                vertical: 40,
+                vertical: 25,
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  CircleAvatar(
-                    backgroundImage: AssetImage('assets/icon.png'),
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        name,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 10,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundImage: AssetImage('assets/icon.png'),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      Text(
-                        "Bölüm",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w300,
-                          color: Colors.white60,
+                        Text(
+                          "Bölüm",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white60,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             Container(
@@ -283,7 +293,7 @@ class _HomePageState extends State<HomePage>
 
   Widget komiteler(Size size, context) {
     return Container(
-      height: 140,
+      height: 120,
       child: Consumer<AppState>(
         builder: (context, appState, _) => ListView.builder(
           itemCount: komiteIsimler.length,
@@ -326,22 +336,20 @@ class _HomePageState extends State<HomePage>
         children: [
           for (final event in events)
             if (event.categoryIds.contains(appState.selectedCategoryId))
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EventDetailsPage(
-                              event: event,
-                            ),
-                          ));
-                    },
-                    child: EventWidget(
-                      event: event,
-                    ),
-                  )),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EventDetailsPage(
+                          event: event,
+                        ),
+                      ));
+                },
+                child: EventWidget(
+                  event: event,
+                ),
+              ),
           SizedBox(
             height: 10,
           )

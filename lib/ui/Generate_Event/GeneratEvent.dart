@@ -304,10 +304,11 @@ class _Create_EventState extends State<Create_Event> {
         ),
         items: [
           buildDropdownMenuItem("Computer Society", 1),
-          buildDropdownMenuItem("Educational Activities", 2),
+          buildDropdownMenuItem("Communications Society", 2),
           buildDropdownMenuItem("Power And Energy Society", 3),
           buildDropdownMenuItem("Robotics & Automation Society", 4),
-          buildDropdownMenuItem("Women in Engineering", 5),
+          buildDropdownMenuItem("Educational Activities", 5),
+          buildDropdownMenuItem("Women in Engineering", 6),
         ],
         onChanged: (int secilen) {
           setState(() {

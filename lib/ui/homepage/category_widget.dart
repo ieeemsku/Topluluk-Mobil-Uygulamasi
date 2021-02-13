@@ -31,6 +31,15 @@ class CategoryWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
+              boxShadow: [
+                BoxShadow(
+                  color:
+                      isSelected ? Colors.grey.shade900 : Colors.grey.shade700,
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
             ),
             child: Column(
               children: [
@@ -44,12 +53,6 @@ class CategoryWidget extends StatelessWidget {
               ],
             ),
           ),
-          isSelected
-              ? Icon(Icons.adjust)
-              : Icon(
-                  Icons.forward,
-                  size: 0,
-                )
         ],
       ),
     );

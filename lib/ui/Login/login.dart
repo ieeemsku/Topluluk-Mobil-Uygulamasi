@@ -33,7 +33,7 @@ class LoginPage extends StatelessWidget {
         body: Center(
           child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 buildHeader(),
                 Padding(
@@ -91,7 +91,7 @@ class LoginPage extends StatelessWidget {
 
   Widget buildFormfield(UserModel userModel, BuildContext context) {
     return Container(
-      height: size.height * 0.45,
+      height: size.height * 0.40,
       width: size.width * 0.86,
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10)),

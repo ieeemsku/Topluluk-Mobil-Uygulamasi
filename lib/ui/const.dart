@@ -54,6 +54,18 @@ const miniHeader2 = TextStyle(
       ),
     ]);
 
+var splashBg = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    stops: <double>[
+      0.1,
+      0.9,
+    ],
+    colors: [
+      Color.fromRGBO(255, 255, 255, 1),
+      Color.fromRGBO(112, 128, 144, 1),
+    ]);
+
 var textStyle1 = TextStyle(
     color: Colors.grey.shade700, fontFamily: "Catamaran", fontSize: 16);
 var indigoButton = LinearGradient(

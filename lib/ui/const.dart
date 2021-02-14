@@ -54,6 +54,8 @@ const miniHeader2 = TextStyle(
       ),
     ]);
 
+var textStyle1 = TextStyle(
+    color: Colors.grey.shade700, fontFamily: "Catamaran", fontSize: 16);
 var indigoButton = LinearGradient(
     begin: Alignment.topRight,
     end: Alignment.bottomLeft,

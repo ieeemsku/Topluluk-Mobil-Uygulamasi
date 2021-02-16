@@ -6,10 +6,12 @@ import 'package:stuventmobil/configuration.dart';
 import 'package:stuventmobil/model/event.dart';
 import 'package:stuventmobil/model/userC.dart';
 import 'package:stuventmobil/notification_handler.dart';
+import 'package:stuventmobil/ui/Generate_Event/GeneratEvent.dart';
+import 'package:stuventmobil/ui/Generate_Notification/GenerateNotification.dart';
+import 'package:stuventmobil/ui/Profil/profil.dart';
 import 'package:stuventmobil/ui/Profil/update_password_page.dart';
 import 'package:stuventmobil/ui/homepage/category_widget.dart';
 import 'package:stuventmobil/ui/homepage/event_widget.dart';
-import 'package:stuventmobil/ui/splash_screen_elif.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
 import 'file:///C:/Users/HAKKICAN/AndroidStudioProjects/Topluluk-Mobil-Uygulamasi/lib/ui/homepage/myEvents.dart';
@@ -199,7 +201,7 @@ class _HomePageState extends State<HomePage>
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Splash()),
+                                          builder: (context) => Profil()),
                                     );
                                   } else if (e['title'] == "Şifremi Güncelle") {
                                     Navigator.push(
@@ -207,6 +209,19 @@ class _HomePageState extends State<HomePage>
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 ChangePassword()));
+                                  } else if (e['title'] ==
+                                      "Yeni Etkinlik Oluştur") {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Create_Event()));
+                                  } else if (e['title'] ==
+                                      "Yeni Bildirim Oluştur") {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Notice()));
                                   }
                                 },
                                 icon: Icon(

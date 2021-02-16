@@ -16,7 +16,7 @@ import 'package:stuventmobil/viewmodel/user_model.dart';
 import 'file:///C:/Users/HAKKICAN/AndroidStudioProjects/Topluluk-Mobil-Uygulamasi/lib/ui/event_details/event_details_page.dart';
 
 import '../const.dart';
-import 'komiteler.dart';
+import '../komiteler.dart';
 
 class HomePage extends StatefulWidget {
   @override

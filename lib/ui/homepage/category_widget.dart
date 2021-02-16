@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuventmobil/app_state.dart';
 
-import 'komiteler.dart';
+import '../komiteler.dart';
 
 class CategoryWidget extends StatelessWidget {
   final int categoryId;

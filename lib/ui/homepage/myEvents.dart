@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:topluluk_tasarim/const.dart';
+import 'package:provider/provider.dart';
+import 'package:stuventmobil/model/userC.dart';
+import 'package:stuventmobil/viewmodel/user_model.dart';
+
+import '../const.dart';
 
 class MyEvents extends StatefulWidget {
   @override
@@ -9,19 +13,12 @@ class MyEvents extends StatefulWidget {
 class _MyEventsState extends State<MyEvents> {
   Size size;
   var bankSelected;
-  List<dynamic> oldEventsList = [
-    "Cs Soru Cevap",
-    "Wie Enerjide Kadınlar",
-    "Staj Günlükleri",
-  ];
-  List<dynamic> newEventsList = [
-    "Cs Vodafone",
-    "Wie İlkokul Eğitim",
-    "Staj Günlükleri",
-  ];
+  List<dynamic> katildigimEtkinlikler = [], katilacagimEtkinlikler = [];
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    readEvents();
     return Scaffold(
       body: Container(
         height: size.height,
@@ -31,12 +28,24 @@ class _MyEventsState extends State<MyEvents> {
             SizedBox(
               height: 15,
             ),
-            oldEvents(oldEventsList, "Katıldıklarım", size, context),
-            newEvents(newEventsList, "Katılacaklarım", size, context)
+            oldEvents(katildigimEtkinlikler, "Katıldıklarım", size, context),
+            newEvents(katilacagimEtkinlikler, "Katılacaklarım", size, context)
           ],
         ),
       ),
     );
+  }
+
+  Future<void> readEvents() async {
+    try {
+      UserModel userModel = Provider.of<UserModel>(context);
+      UserC userC = await userModel.currentUser();
+      String userId = userC.userID;
+      katildigimEtkinlikler = await userModel.readEvents(userId);
+      katilacagimEtkinlikler = await userModel.readWillEvents(userId);
+    } catch (e) {
+      print("readEvents hata: " + e.toString());
+    }
   }
 
   Widget buildHeader(Size size) {

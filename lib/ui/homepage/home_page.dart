@@ -10,12 +10,12 @@ import 'package:stuventmobil/ui/Profil/profil.dart';
 import 'package:stuventmobil/ui/Profil/update_password_page.dart';
 import 'package:stuventmobil/ui/homepage/category_widget.dart';
 import 'package:stuventmobil/ui/homepage/event_widget.dart';
-import 'package:stuventmobil/ui/homepage/my_events.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
-import 'file:///C:/Users/HAKKICAN/AndroidStudioProjects/Topluluk-Mobil-Uygulamasi/lib/ui/event_details/event_details_page.dart';
+import 'file:///C:/Users/HAKKICAN/AndroidStudioProjects/Topluluk-Mobil-Uygulamasi/lib/ui/homepage/myEvents.dart';
 
 import '../const.dart';
+import '../event_details/event_details_page.dart';
 import '../komiteler.dart';
 
 class HomePage extends StatefulWidget {

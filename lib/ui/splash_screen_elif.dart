@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../const.dart';
+
+import 'const.dart';
 
 class Splash extends StatelessWidget {
-  Size size;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -38,8 +38,7 @@ class Splash extends StatelessWidget {
       width: size.width * 0.8,
       decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("assets/logo/ieeelogo.png"),
-              fit: BoxFit.cover)),
+              image: AssetImage("assets/png/ieeemsku.png"), fit: BoxFit.cover)),
     );
   }
 
@@ -82,13 +81,13 @@ class Splash extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Image.asset(
-          "assets/logo/beyazLogo/ras_w.png",
+          "assets/png/ras.png",
           height: 50,
           width: 135,
           fit: BoxFit.cover,
         ),
         Image.asset(
-          "assets/logo/beyazLogo/ea_w.png",
+          "assets/png/ea.png",
           height: 110,
           width: 100,
           fit: BoxFit.cover,
@@ -102,7 +101,7 @@ class Splash extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset(
-          "assets/logo/beyazLogo/cs_w.png",
+          "assets/png/cs.png",
           height: 45,
           width: 150,
           fit: BoxFit.cover,
@@ -116,7 +115,7 @@ class Splash extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Image.asset(
-          "assets/logo/beyazLogo/wie_w.png",
+          "assets/png/wie.png",
           height: 75,
           width: 95,
           fit: BoxFit.cover,
@@ -125,7 +124,7 @@ class Splash extends StatelessWidget {
           height: 25,
         ),
         Image.asset(
-          "assets/logo/beyazLogo/pes_w.png",
+          "assets/png/pes.png",
           height: 75,
           width: 100,
           fit: BoxFit.cover,

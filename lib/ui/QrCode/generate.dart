@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:qr_flutter/src/qr_image.dart';
 import 'dart:ui';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+import '../const.dart';
 
 class GenerateScreen extends StatefulWidget {
   String text;
@@ -18,22 +20,42 @@ class GenerateScreenState extends State<GenerateScreen> {
 
   GenerateScreenState(this._dataString);
 
-  // static const double _topSectionTopPadding = 50.0;
-  // static const double _topSectionBottomPadding = 20.0;
-  // static const double _topSectionHeight = 50.0;
-
   GlobalKey globalKey = new GlobalKey();
-
-  //String _inputErrorText;
-  //final TextEditingController _textController =  TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('$_dataString Event QR'),
+      body: Column(
+        children: <Widget>[
+          buildHeader(size),
+          _contentWidget(),
+        ],
       ),
-      body: _contentWidget(),
+    );
+  }
+
+  Widget buildHeader(Size size) {
+    return Container(
+      height: 200,
+      width: size.width,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(35),
+            bottomRight: Radius.circular(35),
+          ),
+          color: qrColor),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: Text(
+              "Yoklama İçin QR",
+              style: headerText,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -44,14 +66,12 @@ class GenerateScreenState extends State<GenerateScreen> {
       color: const Color(0xFFFFFFFF),
       child: Column(
         children: <Widget>[
-          Expanded(
-            child: Center(
-              child: RepaintBoundary(
-                key: globalKey,
-                child: QrImage(
-                  data: _dataString,
-                  size: 0.5 * bodyHeight,
-                ),
+          Center(
+            child: RepaintBoundary(
+              key: globalKey,
+              child: QrImage(
+                data: _dataString,
+                size: bodyHeight * 0.5,
               ),
             ),
           ),

@@ -1,26 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuventmobil/app/exceptions.dart';
 import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
 import 'package:stuventmobil/model/event.dart';
+import 'package:stuventmobil/model/userC.dart';
+import 'package:stuventmobil/ui/QrCode/generate.dart';
 import 'package:stuventmobil/ui/QrCode/scan.dart';
 import 'package:stuventmobil/ui/event_details/participants_page.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
 import '../const.dart';
 
-class EventDetailsPage extends StatelessWidget {
+class EventDetailsPage extends StatefulWidget {
   final Function press;
-  var size;
   final Event event;
 
   EventDetailsPage({Key key, this.press, this.event}) : super(key: key);
 
   @override
+  _EventDetailsPageState createState() => _EventDetailsPageState();
+}
+
+class _EventDetailsPageState extends State<EventDetailsPage> {
+  var size;
+  bool superU = false;
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     UserModel _userModel = Provider.of<UserModel>(context);
+    superUser(_userModel, context);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -95,10 +106,10 @@ class EventDetailsPage extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 50,
+                    height: size.width * 0.2,
                   ),
                   Text(
-                    "Buluşma Yeri: " + event.location,
+                    "Buluşma Yeri: " + widget.event.location,
                     style: miniHeader2,
                   )
                 ],
@@ -111,12 +122,12 @@ class EventDetailsPage extends StatelessWidget {
                 height: size.height * 0.3,
                 width: size.width * 0.6,
                 child: Hero(
-                    tag: event.title,
+                    tag: widget.event.title,
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: FadeInImage.assetNetwork(
                           placeholder: "assets/loading.gif",
-                          image: event.imageURL,
+                          image: widget.event.imageURL,
                           fit: BoxFit.cover,
                         ))),
               ),
@@ -143,7 +154,7 @@ class EventDetailsPage extends StatelessWidget {
                 style: miniHeader2,
               ),
               onTap: () {
-                katiliyorum(userModel, event.title, context);
+                katiliyorum(userModel, widget.event.title, context);
               },
             ),
           ),
@@ -164,7 +175,7 @@ class EventDetailsPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => ParticipantsPage(
-                            eventName: event.title,
+                            eventName: widget.event.title,
                           )),
                 );
               },
@@ -207,7 +218,7 @@ class EventDetailsPage extends StatelessWidget {
             child: Icon(
               Icons.camera_alt,
               color: Colors.white,
-              size: 35,
+              size: 30,
             ),
             onTap: () {
               Navigator.push(
@@ -217,9 +228,28 @@ class EventDetailsPage extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(
-          width: 50,
-        ),
+        if (superU)
+          Container(
+            height: 50,
+            width: 50,
+            decoration: BoxDecoration(
+                gradient: indigoButton,
+                borderRadius: BorderRadius.circular(10)),
+            child: GestureDetector(
+              child: Icon(
+                FontAwesome.qrcode,
+                color: Colors.white,
+                size: 35,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => GenerateScreen(widget.event.title)),
+                );
+              },
+            ),
+          ),
       ],
     );
   }
@@ -251,5 +281,12 @@ class EventDetailsPage extends StatelessWidget {
         anaButonYazisi: "Tamam",
       ).goster(context);
     }
+  }
+
+  Future<void> superUser(UserModel userModel, BuildContext context) async {
+    UserC userC = await userModel.currentUser();
+    setState(() {
+      superU = userC.superUser;
+    });
   }
 }

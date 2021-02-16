@@ -115,15 +115,21 @@ class FirestoreDBService implements DBBase {
   Future<bool> yoklamaAl(String userName, String userID, String eventName) {
     DocumentReference eventRef = _firebaseDB.doc("Users/$userID");
 
-    List katildigimEtkinlikler;
+    List katildigimEtkinlikler, katilacagimEtkinlikler;
     _firebaseDB.runTransaction((Transaction transaction) async {
       DocumentSnapshot eventData = await eventRef.get();
       Map<String, dynamic> data = eventData.data();
       katildigimEtkinlikler = data["katildigimEtkinlikler"];
+      katilacagimEtkinlikler = data["katilacagimEtkinlikler"];
       if (!katildigimEtkinlikler.contains(eventName)) {
         katildigimEtkinlikler.add(eventName);
         transaction
             .update(eventRef, {"katildigimEtkinlikler": katildigimEtkinlikler});
+      }
+      if (katilacagimEtkinlikler.contains(eventName)) {
+        katilacagimEtkinlikler.remove(eventName);
+        transaction.update(
+            eventRef, {"katilacagimEtkinlikler": katilacagimEtkinlikler});
       }
     });
 

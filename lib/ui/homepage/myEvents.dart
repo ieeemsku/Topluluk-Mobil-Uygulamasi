@@ -11,7 +11,6 @@ class MyEvents extends StatefulWidget {
 }
 
 class _MyEventsState extends State<MyEvents> {
-  Size size;
   var bankSelected;
   List<dynamic> katildigimEtkinlikler = [], katilacagimEtkinlikler = [];
 

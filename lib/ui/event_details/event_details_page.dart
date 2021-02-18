@@ -11,6 +11,7 @@ import 'package:stuventmobil/ui/QrCode/scan.dart';
 import 'package:stuventmobil/ui/event_details/participants_page.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
+import '';
 import '../const.dart';
 
 class EventDetailsPage extends StatefulWidget {

@@ -65,6 +65,23 @@ var splashBg = LinearGradient(
       Color.fromRGBO(255, 255, 255, 1),
       Color.fromRGBO(112, 128, 144, 1),
     ]);
+var textStyle4 = TextStyle(
+    color: Colors.grey.shade900,
+    fontFamily: "Catamaran",
+    fontSize: 18,
+    fontWeight: FontWeight.bold);
+
+var textStyle3 = TextStyle(
+    color: Colors.grey.shade500,
+    fontFamily: "Catamaran",
+    fontSize: 18,
+    fontWeight: FontWeight.bold);
+
+var textStyle2 = TextStyle(
+    color: Colors.grey.shade700,
+    fontFamily: "Catamaran",
+    fontSize: 22,
+    fontWeight: FontWeight.bold);
 
 var textStyle1 = TextStyle(
     color: Colors.grey.shade700, fontFamily: "Catamaran", fontSize: 16);
@@ -175,3 +192,24 @@ const blueBotton = LinearGradient(
     ]);
 
 const qrColor = Color.fromRGBO(242, 210, 242, 1);
+
+const fakulteler = [
+  "Dalaman Sivil Havacılık Yüksekokulu",
+  "Diş Hekimliği Fakültesi",
+  "Edebiyat Fakültesi",
+  "Eğitim Fakültesi",
+  "Fen Fakültesi",
+  "Fethiye İşletme Fakültesi",
+  "Fethiye Sağlık Bilimleri Fakültesi",
+  "İktisadi ve İdari Bilimler Fakültesi",
+  "İslami İlimler Fakültesi",
+  "Milas Veteriner Fakültesi",
+  "Mimarlık Fakültesi",
+  "Mühendislik Fakültesi",
+  "Sağlık Bilimleri Fakültesi",
+  "Seydikemer Uygulamalı Bilimler Yüksekokulu",
+  "Su Ürünleri Fakültesi",
+  "Teknoloji Fakültesi",
+  "Tıp Fakültesi",
+  "Turizm Fakültesi"
+];

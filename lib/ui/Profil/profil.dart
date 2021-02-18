@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
 import 'package:stuventmobil/model/userC.dart';
-import 'package:stuventmobil/ui/Generate_Event/GeneratEvent.dart';
-import 'package:stuventmobil/ui/Generate_Notification/GenerateNotification.dart';
-import 'package:stuventmobil/ui/Profil/update_password_page.dart';
+import 'package:stuventmobil/ui/take_info_page_elif.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import '../const.dart';
 
 class Profil extends StatefulWidget {
   @override
@@ -16,171 +16,33 @@ class Profil extends StatefulWidget {
 
 class _ProfilState extends State<Profil> {
   final formKey = GlobalKey<FormState>();
-
-  String name = "", mail = "", password;
+  String name = "",
+      mail = "",
+      bolum = "",
+      ilgiAlani = "",
+      hobi = "",
+      komite = "";
   bool superU = false;
-  bool otomatikKontrol = false;
-
-  String hBLinkedin = "https://www.linkedin.com/in/hakkican-buluc/";
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     UserModel _userModel = Provider.of<UserModel>(context, listen: false);
     read(_userModel);
-    return Theme(
-      data: Theme.of(context).copyWith(
-          accentColor: Colors.green,
-          hintColor: Colors.indigo,
-          errorColor: Colors.red,
-          primaryColor: Color(0xffAA00AA)),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Profil"),
-          backgroundColor: Color(0xFFFF4700),
+    Size size = MediaQuery.of(context).size;
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Column(children: <Widget>[
+        buildHeader(context, size),
+        buildPassword(),
+        SizedBox(
+          height: 35,
         ),
-        body: Padding(
-          padding: EdgeInsets.all(10),
-          child: Form(
-            key: formKey,
-            child: ListView(
-              children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(
-                      "İsim:",
-                      style: TextStyle(fontSize: 20, color: Color(0xffAA00AA)),
-                    ),
-                    Text(
-                      name,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "E-posta:",
-                      style: TextStyle(fontSize: 20, color: Color(0xffAA00AA)),
-                    ),
-                    Text(
-                      mail,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                RaisedButton(
-                  child: Text(
-                    "Şifremi Güncelle",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ChangePassword()));
-                  },
-                  color: Colors.pink,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                if (superU)
-                  RaisedButton(
-                    child: Text(
-                      "Yeni Etkinlik Oluştur",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Create_Event()),
-                      );
-                    },
-                    color: Colors.green,
-                  ),
-                SizedBox(
-                  height: 10,
-                ),
-                if (superU)
-                  RaisedButton(
-                    child: Text(
-                      "Yeni Duyuru Bildirimi Oluştur",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Notice()),
-                      );
-                    },
-                    color: Colors.blue,
-                  ),
-                if (superU)
-                  SizedBox(
-                    height: 10,
-                  ),
-                RaisedButton(
-                  child: Text(
-                    "Oturumu Kapat",
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w800),
-                  ),
-                  onPressed: () {
-                    _cikisIcinOnayIste(context, _userModel);
-                  },
-                  color: Colors.red,
-                ),
-                SizedBox(
-                  height: 90,
-                ),
-                Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: Column(
-                      children: [
-                        Text("© 2020 IEEE MSKU - Tüm Hakları Sakldır."),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Created by ",
-                              textAlign: TextAlign.center,
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                if (await canLaunch(hBLinkedin)) {
-                                  await launch(hBLinkedin);
-                                } else {
-                                  debugPrint("Could not launch: $hBLinkedin");
-                                }
-                              },
-                              child: Text(
-                                "Mr. Bülüç",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ))
-              ],
-            ),
-          ),
+        buildBackAndLogOut(_userModel),
+        SizedBox(
+          height: 30,
         ),
-      ),
+        buildLegal(size),
+      ]),
     );
   }
 
@@ -192,7 +54,200 @@ class _ProfilState extends State<Profil> {
           : "${user.userName} ${user.lastName}";
       mail = user.email;
       superU = user.superUser;
+      bolum = user.bolum;
+      ilgiAlani = user.ilgiAlani;
+      hobi = user.hobi;
+      komite = user.komite;
     });
+  }
+
+  buildHeader(context, Size size) {
+    return Container(
+      height: size.height * 0.68,
+      child: Stack(
+        children: [
+          Container(
+            width: size.width,
+            height: size.height * 0.33,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30)),
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.1),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: 70,
+                      ),
+                      Text(
+                        name,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30,
+                            fontFamily: "Ubuntu",
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        mail,
+                        style: headerText2,
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: size.height * 0.28,
+            right: size.width * 0.1,
+            left: size.width * 0.1,
+            child: Container(
+                height: size.height * 0.30,
+                width: size.width * 0.6,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Bölüm : $bolum",
+                          style: textStyle2,
+                        ),
+                        Text(
+                          "İlgi Alanı : $ilgiAlani",
+                          style: textStyle2,
+                        ),
+                        Text(
+                          "Hobi : $hobi",
+                          style: textStyle2,
+                        ),
+                        Text(
+                          "Komite : $komite",
+                          style: textStyle2,
+                        )
+                      ],
+                    ),
+                  ),
+                )),
+          ),
+          Positioned(
+            left: size.width * 0.79,
+            top: size.height * 0.54,
+            child: GestureDetector(
+              child: Container(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                    boxShadow: [BoxShadow(blurRadius: 10, color: Colors.grey)],
+                    shape: BoxShape.circle,
+                    color: Colors.grey.shade300),
+                child: Icon(Icons.edit),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TakeInfo()),
+                );
+              },
+            ),
+          ),
+        ],
+        overflow: Overflow.visible,
+      ),
+    );
+  }
+
+  buildPassword() {
+    return Container(
+      height: 50,
+      width: 220,
+      decoration: BoxDecoration(
+        boxShadow: [BoxShadow(blurRadius: 10, color: Colors.grey)],
+        color: Color.fromRGBO(57, 28, 178, 1),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Center(child: Text("Şifremi Güncelle", style: miniHeader2)),
+    );
+  }
+
+  buildBackAndLogOut(UserModel userModel) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20.0),
+      child: Row(
+        children: [
+          IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          Text(
+            "Geri",
+            style: textStyle4,
+          ),
+          SizedBox(
+            width: 150,
+          ),
+          IconButton(
+              icon: Icon(MaterialCommunityIcons.logout),
+              onPressed: () {
+                _cikisIcinOnayIste(context, userModel);
+              }),
+          GestureDetector(
+            child: Text(
+              "Çıkış",
+              style: textStyle4,
+            ),
+            onTap: () {
+              _cikisIcinOnayIste(context, userModel);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  buildLegal(Size size) {
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.19,
+        ),
+        Icon(Icons.copyright),
+        SizedBox(
+          width: 2,
+        ),
+        Text("2020 IEEE MSKU Tüm Hakları Saklıdır.")
+      ],
+    );
   }
 
   Future<void> _cikisyap(BuildContext context, UserModel userModel) async {

@@ -14,4 +14,6 @@ abstract class DBBase {
   Future<List<dynamic>> readParticipants(String eventName);
   Future<List<dynamic>> readEvents(String userID);
   Future<List<dynamic>> readWillEvents(String userId);
+  Future<bool> setProfil(String userID, String secilenBolum, String ilgiAlani,
+      String hobi, String komite);
 }

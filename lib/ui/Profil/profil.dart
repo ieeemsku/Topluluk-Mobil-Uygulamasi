@@ -4,8 +4,9 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
 import 'package:stuventmobil/model/userC.dart';
-import 'package:stuventmobil/ui/take_info_page_elif.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
+
+import 'file:///C:/Users/HAKKICAN/AndroidStudioProjects/Topluluk-Mobil-Uygulamasi/lib/ui/Profil/take_info_page.dart';
 
 import '../const.dart';
 

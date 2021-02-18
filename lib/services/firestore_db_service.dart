@@ -164,7 +164,22 @@ class FirestoreDBService implements DBBase {
             {"katilacagimEtkinlikler": katilacagimEtkinlikler});
       }
     });
+    return Future.value(true);
+  }
 
+  @override
+  Future<bool> setProfil(String userID, String secilenBolum, String ilgiAlani,
+      String hobi, String komite) {
+    DocumentReference documentReference = _firebaseDB.doc("Users/$userID");
+
+    _firebaseDB.runTransaction((Transaction transaction) async {
+      transaction.update(documentReference, {
+        "Bölüm": secilenBolum,
+        "Hobi": hobi,
+        "Komite": komite,
+        "İlgiAlani": ilgiAlani
+      });
+    });
     return Future.value(true);
   }
 

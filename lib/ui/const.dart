@@ -213,3 +213,110 @@ const fakulteler = [
   "Tıp Fakültesi",
   "Turizm Fakültesi"
 ];
+
+const dalamanSivilHavacilikYuksekokulu = ["Havacılık Yönetimi"];
+
+const disHekimligi = ["Diş Hekimliği"];
+
+const edebiyat = [
+  "Arkeoloji",
+  "Çağdaş Türk Lehçeleri ve Edebiyatları",
+  "Felsefe",
+  "İngiliz Dili ve Edebiyatı",
+  "İngilizce Mütercim ve Tercümanlık",
+  "Psikoloji",
+  "Sanat Tarihi",
+  "Sosyoloji",
+  "Tarih",
+  "Tarih (İÖ)",
+  "Türk Dili ve Edebiyatı",
+  "Türk Dili ve Edebiyatı (İÖ)"
+];
+
+const egitim = [
+  "Almanca Öğretmenliği",
+  "Fen Bilgisi Öğretmenliği",
+  "İlköğretim Matematik Öğretmenliği",
+  "İngilizce Öğretmenliği (İngilizce)",
+  "Okul Öncesi Öğretmenliği",
+  "Özel Eğitim Öğretmenliği",
+  "Rehberlik ve Psikolojik Danışmanlık",
+  "Sınıf Öğretmenliği",
+  "Sosyal Bilgiler Öğretmenliği",
+  "Türkçe Öğretmenliği"
+];
+
+const fen = [
+  "Biyoloji",
+  "Fizik",
+  "İstatistik",
+  "Kimya",
+  "Matematik",
+  "Moleküler Biyoloji ve Genetik"
+];
+
+const isletme = [
+  "Ekonomi ve Finans",
+  "İşletme",
+  "Turizm İşletmeciliği",
+  "Uluslararası Ticaret ve Lojistik",
+  "Yönetim Bilişim Sistemleri"
+];
+
+const fethiyeSaglik = ["Beslenme ve Diyetetik", "Hemşirelik"];
+
+const iktisadi = [
+  "Çalışma Ekonomisi ve Endüstri İlişkileri",
+  "Çalışma Ekonomisi ve Endüstri İlişkileri (İÖ)",
+  "İktisat",
+  "İktisat (İngilizce)",
+  "İktisat (İngilizce) (İÖ)",
+  "İktisat (İÖ)",
+  "İşletme",
+  "İşletme (İÖ)",
+  "Kamu Yönetimi",
+  "Kamu Yönetimi (İÖ)",
+  "Siyaset Bilimi ve Uluslararası İlişkiler",
+  "Uluslararası Ticaret ve Finansman",
+  "Uluslararası Ticaret ve Finansman (İÖ)"
+];
+
+const islami = ["İslami İlimler"];
+
+const veteriner = ["Veterinerlik"];
+
+const mimarlik = ["Mimarlık", "Şehir ve Bölge Planlama"];
+
+const muhendislik = [
+  "Bilgisayar Mühendisliği (İngilizce)",
+  "Elektrik-Elektronik Mühendisliği (İngilizce)",
+  "İnşaat Mühendisliği (İngilizce)",
+  "Maden Mühendisliği (İngilizce)",
+  "Metalürji ve Malzeme Mühendisliği (İngilizce)"
+];
+
+const saglik = [
+  "Beslenme ve Diyetetik",
+  "Fizyoterapi ve Rehabilitasyon",
+  "Hemşirelik",
+  "Sağlık Yönetimi"
+];
+
+const seydikemer = ["Muhasebe ve Finans Yönetimi", "Sosyal Hizmet"];
+
+const su = ["Su Ürünleri Mühendisliği"];
+
+const teknoloji = [
+  "Ağaç İşleri Endüstri Mühendisliği",
+  "Bilişim Sistemleri Mühendisliği",
+  "Enerji Sistemleri Mühendisliği"
+];
+
+const tip = ["Tıp", "Tıp (İngilizce)"];
+
+const turizm = [
+  "Turizm İşletmeciliği",
+  "Turizm İşletmeciliği (İngilizce)",
+  "Yiyecek ve İçecek İşletmeciliği",
+  "Yiyecek ve İçecek İşletmeciliği (KKTC Uyruklu)"
+];

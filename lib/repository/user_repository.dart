@@ -87,9 +87,10 @@ class UserRepository implements AuthBase {
         collection, documentName, alan, map);
   }
 
-  Future<bool> setData(
-      String s, String eventName, Map<String, dynamic> data) async {
-    var dbYazmaIslemi = await _firestoreDBService.setData(s, eventName, data);
+  Future<bool> setEvent(
+      String collection, String eventName, Map<String, dynamic> data) async {
+    var dbYazmaIslemi =
+        await _firestoreDBService.setData(collection, eventName, data);
     if (dbYazmaIslemi) {
       return await _bildirimGondermeServis.eventBildirimGonder(data);
     }
@@ -125,6 +126,12 @@ class UserRepository implements AuthBase {
       String userID, String eventName) async {
     return await _firestoreDBService.katilacagimEtkinliklerEkle(
         userID, eventName);
+  }
+
+  Future<bool> setProfil(String userID, String secilenBolum, String ilgiAlani,
+      String hobi, String komite) async {
+    return await _firestoreDBService.setProfil(
+        userID, secilenBolum, ilgiAlani, hobi, komite);
   }
 
   Future<bool> updatePassword(String password) async {

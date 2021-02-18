@@ -136,7 +136,7 @@ class UserModel with ChangeNotifier implements AuthBase {
   Future<bool> setData(
       String s, String eventname, Map<String, dynamic> data) async {
     try {
-      bool sonuc = await _userRepository.setData(s, eventname, data);
+      bool sonuc = await _userRepository.setEvent(s, eventname, data);
       return sonuc;
     } catch (e) {
       print("user_model hata: " + e.toString());
@@ -206,6 +206,13 @@ class UserModel with ChangeNotifier implements AuthBase {
       String userID, String eventName) async {
     bool sonuc =
         await _userRepository.katilacagimEtkinliklerEkle(userID, eventName);
+    return sonuc;
+  }
+
+  Future<bool> setProfil(String userID, String secilenBolum, String ilgiAlani,
+      String hobi, String komite) async {
+    bool sonuc = await _userRepository.setProfil(
+        userID, secilenBolum, ilgiAlani, hobi, komite);
     return sonuc;
   }
 

@@ -22,10 +22,11 @@ class FirebaseAuthService implements AuthBase {
       return null;
     } else {
       return UserC(
-          userID: user.uid,
-          email: user.email,
-          userName: user.displayName,
-          superUser: false);
+        userID: user.uid,
+        email: user.email,
+        userName: user.displayName,
+        superUser: false,
+      );
     }
   }
 
@@ -81,7 +82,11 @@ class FirebaseAuthService implements AuthBase {
         lastName: lastname,
         superUser: superUser,
         katildigimEtkinlikler: katildigimEtkinlikler,
-        katilacagimEtkinlikler: katilacagimEtkinlikler);
+        katilacagimEtkinlikler: katilacagimEtkinlikler,
+        bolum: "",
+        ilgiAlani: "",
+        hobi: "",
+        komite: "");
   }
 
   @override

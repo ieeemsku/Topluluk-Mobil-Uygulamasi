@@ -9,6 +9,10 @@ class UserC {
   bool superUser = false;
   List<dynamic> katildigimEtkinlikler;
   List<dynamic> katilacagimEtkinlikler;
+  String bolum;
+  String ilgiAlani;
+  String hobi;
+  String komite;
 
   UserC(
       {@required this.userID,
@@ -17,17 +21,25 @@ class UserC {
       this.lastName,
       this.superUser,
       this.katildigimEtkinlikler,
-      this.katilacagimEtkinlikler});
+      this.katilacagimEtkinlikler,
+      this.bolum,
+      this.ilgiAlani,
+      this.hobi,
+      this.komite});
 
   Map<String, dynamic> toMap() {
     return {
       'Ad': userName,
       "Soyad": lastName,
       'E-mail': email,
-      'Katıldığım Etkinlikler': katildigimEtkinlikler,
-      'Katılacağım Etkinlikler': katilacagimEtkinlikler,
+      'katildigimEtkinlikler': katildigimEtkinlikler,
+      'katilacagimEtkinlikler': katilacagimEtkinlikler,
       'SuperUser': superUser,
-      "UserID": userID
+      "UserID": userID,
+      "Bölüm": bolum,
+      "İlgiAlani": ilgiAlani,
+      "Hobi": hobi,
+      "Komite": komite,
     };
   }
 
@@ -38,7 +50,11 @@ class UserC {
         lastName = map["Soyad"],
         superUser = map["SuperUser"],
         katildigimEtkinlikler = map["katildigimEtkinlikler"],
-        katilacagimEtkinlikler = map["katilacagimEtkinlikler"];
+        katilacagimEtkinlikler = map["katilacagimEtkinlikler"],
+        bolum = map["Bölüm"],
+        ilgiAlani = map["İlgiAlani"],
+        hobi = map["Hobi"],
+        komite = map["Komite"];
   //profilURL = map['profilURL'],
 
   UserC.idveResim({@required this.userID, @required this.profilURL});

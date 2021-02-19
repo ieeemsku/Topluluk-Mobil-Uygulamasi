@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+List categories = [
+  "Bilgisayar Mühendisliği",
+  "Elektrik Elektronik Mühendisliği",
+  "İnşaat Mühendisliği"
+];
+List categories2 = ["Wie", "Cs", "Ea"];
 const detailsColor = Color.fromRGBO(151, 175, 255, 1);
 const detailsColor2 = Color.fromRGBO(213, 217, 255, 1);
 

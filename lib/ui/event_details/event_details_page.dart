@@ -11,7 +11,6 @@ import 'package:stuventmobil/ui/QrCode/scan.dart';
 import 'package:stuventmobil/ui/event_details/participants_page.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
-import '';
 import '../const.dart';
 
 class EventDetailsPage extends StatefulWidget {
@@ -188,71 +187,75 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   }
 
   Widget buildBackAndQr(context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            child: Row(
-              children: [
-                Icon(
-                  Icons.arrow_back,
-                  color: detailsColor,
-                ),
-                Text(
-                  "Geri",
-                  style: TextStyle(color: detailsColor, fontSize: 20),
-                )
-              ],
-            ),
-          ),
-        ),
-        Container(
-          height: 50,
-          width: 50,
-          decoration: BoxDecoration(
-              gradient: indigoButton, borderRadius: BorderRadius.circular(10)),
-          child: GestureDetector(
-            child: Icon(
-              Icons.camera_alt,
-              color: Colors.white,
-              size: 30,
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ScanScreen()),
-              );
-            },
-          ),
-        ),
-        if (superU)
-          Container(
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-                gradient: indigoButton,
-                borderRadius: BorderRadius.circular(10)),
-            child: GestureDetector(
-              child: Icon(
-                FontAwesome.qrcode,
-                color: Colors.white,
-                size: 35,
-              ),
+    return Padding(
+        padding: const EdgeInsets.only(bottom: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => GenerateScreen(widget.event.title)),
-                );
+                Navigator.pop(context);
               },
+              child: Container(
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.arrow_back,
+                      color: detailsColor,
+                    ),
+                    Text(
+                      "Geri",
+                      style: TextStyle(color: detailsColor, fontSize: 20),
+                    )
+                  ],
+                ),
+              ),
             ),
-          ),
-      ],
-    );
+            Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                  gradient: indigoButton,
+                  borderRadius: BorderRadius.circular(10)),
+              child: GestureDetector(
+                child: Icon(
+                  Icons.camera_alt,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ScanScreen()),
+                  );
+                },
+              ),
+            ),
+            if (superU)
+              Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                    gradient: indigoButton,
+                    borderRadius: BorderRadius.circular(10)),
+                child: GestureDetector(
+                  child: Icon(
+                    FontAwesome.qrcode,
+                    color: Colors.white,
+                    size: 35,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              GenerateScreen(widget.event.title)),
+                    );
+                  },
+                ),
+              ),
+          ],
+        ));
   }
 
   Future<void> katiliyorum(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'const.dart';
+import '../ui/const.dart';
 
-class Splash extends StatelessWidget {
+class SplashScreen extends StatelessWidget {
   Size size;
   @override
   Widget build(BuildContext context) {
@@ -16,26 +16,29 @@ class Splash extends StatelessWidget {
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.transparent,
             body: Center(
-              child: Column(
-                children: [
-                  builHeaderPng(size),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  buildCircle(size),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  buildRasAndEa(),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  buildCs(),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  buildWieKokPes(),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.only(right: 15, left: 15),
+                child: Column(
+                  children: [
+                    builHeaderPng(size),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    buildCircle(size),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    buildRasAndEa(),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    buildCs(),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    buildWieKokPes(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -55,8 +58,8 @@ class Splash extends StatelessWidget {
 
   buildCircle(Size size) {
     return Container(
-      height: 270,
-      width: 270,
+      height: 250,
+      width: 250,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -91,7 +94,7 @@ class Splash extends StatelessWidget {
     return Container(
       height: 50,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
             "assets/logo/beyazLogo/ras_w.png",
@@ -131,7 +134,7 @@ class Splash extends StatelessWidget {
     return Container(
       height: 60,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
             "assets/logo/beyazLogo/wie_w.png",

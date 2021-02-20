@@ -50,7 +50,7 @@ const miniHeader = TextStyle(
 const miniHeader2 = TextStyle(
     fontFamily: "Catamaran",
     color: Colors.white,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: FontWeight.bold,
     shadows: <Shadow>[
       Shadow(

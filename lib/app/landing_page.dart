@@ -39,7 +39,7 @@ class LandingPage extends StatelessWidget {
             ),
             CircularProgressIndicator(
               backgroundColor: Colors.white,
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xfff1c984)),
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.grey.shade700),
             )
           ],
         ),

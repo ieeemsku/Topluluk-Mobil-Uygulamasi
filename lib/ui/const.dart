@@ -200,24 +200,24 @@ const blueBotton = LinearGradient(
 const qrColor = Color.fromRGBO(242, 210, 242, 1);
 
 const fakulteler = [
-  "Dalaman Sivil Havacılık Yüksekokulu",
-  "Diş Hekimliği Fakültesi",
-  "Edebiyat Fakültesi",
-  "Eğitim Fakültesi",
-  "Fen Fakültesi",
-  "Fethiye İşletme Fakültesi",
-  "Fethiye Sağlık Bilimleri Fakültesi",
-  "İktisadi ve İdari Bilimler Fakültesi",
-  "İslami İlimler Fakültesi",
-  "Milas Veteriner Fakültesi",
-  "Mimarlık Fakültesi",
-  "Mühendislik Fakültesi",
-  "Sağlık Bilimleri Fakültesi",
-  "Seydikemer Uygulamalı Bilimler Yüksekokulu",
-  "Su Ürünleri Fakültesi",
-  "Teknoloji Fakültesi",
-  "Tıp Fakültesi",
-  "Turizm Fakültesi"
+  "Dalaman Sivil Havacılık",
+  "Diş Hekimliği",
+  "Edebiyat",
+  "Eğitim",
+  "Fen",
+  "Fethiye İşletme",
+  "Fethiye Sağlık Bilimleri",
+  "İktisadi ve İdari Bilimler",
+  "İslami İlimler",
+  "Milas Veteriner",
+  "Mimarlık",
+  "Mühendislik",
+  "Sağlık Bilimleri",
+  "Seydikemer Uygulamalı Bilimler",
+  "Su Ürünleri",
+  "Teknoloji",
+  "Tıp",
+  "Turizm"
 ];
 
 const dalamanSivilHavacilikYuksekokulu = ["Havacılık Yönetimi"];
@@ -294,11 +294,11 @@ const veteriner = ["Veterinerlik"];
 const mimarlik = ["Mimarlık", "Şehir ve Bölge Planlama"];
 
 const muhendislik = [
-  "Bilgisayar Mühendisliği (İngilizce)",
-  "Elektrik-Elektronik Mühendisliği (İngilizce)",
-  "İnşaat Mühendisliği (İngilizce)",
-  "Maden Mühendisliği (İngilizce)",
-  "Metalürji ve Malzeme Mühendisliği (İngilizce)"
+  "Bilgisayar Mühendisliği",
+  "Elektrik-Elektronik Mühendisliği",
+  "İnşaat Mühendisliği",
+  "Maden Mühendisliği",
+  "Metalürji ve Malzeme Mühendisliği"
 ];
 
 const saglik = [

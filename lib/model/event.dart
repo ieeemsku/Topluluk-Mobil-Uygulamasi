@@ -26,12 +26,15 @@ class Event {
 }
 
 final List<Event> events = [];
+final List<int> komitelerList = [];
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 String ad, konum, url;
 List categoryList, katilimcilar;
 Map<String, dynamic> docMap;
+
+int cs = 0, com = 0, pes = 0, ras = 0, ea = 0, wie = 0;
 
 Future<void> read() async {
   events.clear();
@@ -59,8 +62,36 @@ Future<void> read() async {
           documentsMap: docMap,
           participants: katilimcilar);
       events.add(event);
+
+      switch (categoryList[1]) {
+        case 1:
+          cs++;
+          break;
+        case 2:
+          com++;
+          break;
+        case 3:
+          pes++;
+          break;
+        case 4:
+          ras++;
+          break;
+        case 5:
+          ea++;
+          break;
+        case 6:
+          wie++;
+          break;
+      }
     } catch (e) {
       debugPrint("Hata: $e");
     }
   });
+  komitelerList.add(events.length);
+  komitelerList.add(cs);
+  komitelerList.add(com);
+  komitelerList.add(pes);
+  komitelerList.add(ras);
+  komitelerList.add(ea);
+  komitelerList.add(wie);
 }

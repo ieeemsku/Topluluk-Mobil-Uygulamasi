@@ -28,8 +28,8 @@ class _MyAppState extends State<MyApp> {
         home: LandingPage(),
         theme: ThemeData(
           scaffoldBackgroundColor: Color(0xFFFFFFFF),
-          primaryColor: Color(0xFFFF4700),
-          accentColor: Color(0xFFFF4700),
+          primaryColor: Colors.grey.shade100,
+          accentColor: Colors.grey.shade200,
         ),
       ),
     );

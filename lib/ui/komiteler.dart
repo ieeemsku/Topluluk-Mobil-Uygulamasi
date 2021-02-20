@@ -8,6 +8,15 @@ const komiteIsimler = [
   "Women in Engineering"
 ];
 
+const komiteler = [
+  "Computer Society",
+  "Communications Society",
+  "Power&Enegry Society",
+  "Robotic & Automation Society",
+  "Educational Activities",
+  "Women in Engineering"
+];
+
 const komiteLogoPng = [
   "assets/png/ieeemsku.png",
   "assets/png/cs.png",

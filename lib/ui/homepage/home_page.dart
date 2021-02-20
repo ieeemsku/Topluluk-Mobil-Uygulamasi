@@ -105,8 +105,6 @@ class _HomePageState extends State<HomePage>
                               future: read(),
                               builder: (context, sonuc) => Consumer<AppState>(
                                 builder: (context, appState, _) => Container(
-                                    height: events.length * 350.0,
-                                    width: 320,
                                     child: etkinlikler(context, appState)),
                               ),
                             ),
@@ -346,22 +344,26 @@ class _HomePageState extends State<HomePage>
 
   Widget etkinlikler(context, AppState appState) {
     return Container(
+      height: komitelerList[appState.selectedCategoryId] * 350.0,
+      width: 320,
       child: Column(
         children: [
           for (final event in events)
             if (event.categoryIds.contains(appState.selectedCategoryId))
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EventDetailsPage(
-                          event: event,
-                        ),
-                      ));
-                },
-                child: EventWidget(
-                  event: event,
+              Container(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EventDetailsPage(
+                            event: event,
+                          ),
+                        ));
+                  },
+                  child: EventWidget(
+                    event: event,
+                  ),
                 ),
               ),
           SizedBox(

@@ -89,7 +89,10 @@ class _ProfilState extends State<Profil> {
                       Icon(
                         Icons.person,
                         color: Colors.white,
-                        size: 70,
+                        size: 45,
+                      ),
+                      SizedBox(
+                        width: 5,
                       ),
                       Text(
                         name,
@@ -134,26 +137,27 @@ class _ProfilState extends State<Profil> {
                 ),
                 child: Container(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
+                    padding:
+                        const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Bölüm : $bolum",
-                          style: textStyle2,
+                          style: textStyle4,
                         ),
                         Text(
                           "İlgi Alanı : $ilgiAlani",
-                          style: textStyle2,
+                          style: textStyle4,
                         ),
                         Text(
                           "Hobi : $hobi",
-                          style: textStyle2,
+                          style: textStyle4,
                         ),
                         Text(
                           "Komite : $komite",
-                          style: textStyle2,
+                          style: textStyle4,
                         )
                       ],
                     ),

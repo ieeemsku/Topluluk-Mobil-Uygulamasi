@@ -86,7 +86,8 @@ class _CreateAccState extends State<CreateAcc> {
         child: Form(
             key: CreateAcc.formKeyy,
             child: Padding(
-              padding: const EdgeInsets.only(top: 20.0, right: 30, left: 30),
+              padding: const EdgeInsets.only(
+                  top: 15.0, right: 30, left: 30, bottom: 5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [

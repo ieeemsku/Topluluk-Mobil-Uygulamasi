@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage>
   var size;
   double ekranYuksekligi, ekranGenisligi;
 
-  bool menuAcikMi = false;
+  bool menuAcikMi = false, superUser = false;
 
   AnimationController _controller;
   Animation<Offset> _menuOffsetAnimation;
@@ -178,9 +178,54 @@ class _HomePageState extends State<HomePage>
                 horizontal: 5,
               ),
               child: Column(
-                children: drawerItems
-                    .map(
-                      (e) => Padding(
+                children: <Widget>[
+                  for (final e in drawerItems)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 14,
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          FlatButton.icon(
+                              onPressed: () {
+                                if (e['title'] == "Etkinliklerim") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyEvents()),
+                                  );
+                                } else if (e['title'] == "Profil") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Profil()),
+                                  );
+                                } else if (e['title'] == "Şifremi Güncelle") {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChangePassword()));
+                                }
+                              },
+                              icon: Icon(
+                                e['icon'],
+                                color: Colors.white60,
+                                size: 24,
+                              ),
+                              label: Text(
+                                e['title'],
+                                style: TextStyle(
+                                    color: Colors.white60,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
+                              ))
+                        ],
+                      ),
+                    ),
+                  if (superUser)
+                    for (final e in superUserdrawerItems)
+                      Padding(
                         padding: const EdgeInsets.symmetric(
                           vertical: 14,
                         ),
@@ -188,37 +233,19 @@ class _HomePageState extends State<HomePage>
                           children: <Widget>[
                             FlatButton.icon(
                                 onPressed: () {
-                                  if (e['title'] == "Etkinliklerim") {
+                                  if (e['title'] == "Yeni Etkinlik Oluştur") {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => MyEvents()),
+                                          builder: (context) => Create_Event()),
                                     );
-                                  } else if (e['title'] == "Profil") {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Profil()),
-                                    );
-                                  } else if (e['title'] == "Şifremi Güncelle") {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ChangePassword()));
-                                  } else if (e['title'] ==
-                                      "Yeni Etkinlik Oluştur") {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                Create_Event()));
                                   } else if (e['title'] ==
                                       "Yeni Bildirim Oluştur") {
                                     Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Notice()));
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Notice()),
+                                    );
                                   }
                                 },
                                 icon: Icon(
@@ -236,8 +263,7 @@ class _HomePageState extends State<HomePage>
                           ],
                         ),
                       ),
-                    )
-                    .toList(),
+                ],
               ),
             ),
             Container(
@@ -381,6 +407,7 @@ class _HomePageState extends State<HomePage>
       name = user.lastName == null
           ? "${user.userName}"
           : "${user.userName} ${user.lastName}";
+      superUser = user.superUser;
     });
   }
 

@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage>
     return SlideTransition(
       position: _menuOffsetAnimation,
       child: Container(
-        color: primaryGreen,
+        color: primaryGrey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[

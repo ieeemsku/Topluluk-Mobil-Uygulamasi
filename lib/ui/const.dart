@@ -24,7 +24,7 @@ const headerText = TextStyle(
 const headerText2 = TextStyle(
     fontFamily: "Ubuntu",
     color: Colors.white,
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: FontWeight.bold,
     shadows: <Shadow>[
       Shadow(

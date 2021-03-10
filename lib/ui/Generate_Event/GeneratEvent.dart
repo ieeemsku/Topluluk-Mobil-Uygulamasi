@@ -35,19 +35,17 @@ class _Create_EventState extends State<Create_Event> {
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     UserModel _userModel = Provider.of<UserModel>(context);
-    return Expanded(
-      child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
-          body: Column(
-            children: [
-              Theme(
-                  data: ThemeData(primaryColor: new_event_color),
-                  child: buildingHeaderAndTextForm(context, _userModel)),
-              buildingBack(context, _userModel)
-            ],
-          )),
-    );
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        body: Column(
+          children: [
+            Theme(
+                data: ThemeData(primaryColor: new_event_color),
+                child: buildingHeaderAndTextForm(context, _userModel)),
+            buildingBack(context, _userModel)
+          ],
+        ));
   }
 
   Widget buildingHeaderAndTextForm(context, UserModel userModel) {
@@ -326,9 +324,9 @@ class _Create_EventState extends State<Create_Event> {
       child: Row(
         children: <Widget>[
           Container(
-            width: 24,
+            width: 20,
             height: 24,
-            margin: EdgeInsets.only(right: 10),
+            //margin: EdgeInsets.only(right: 10),
           ),
           Text(text),
         ],

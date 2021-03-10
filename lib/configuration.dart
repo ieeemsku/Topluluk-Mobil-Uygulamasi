@@ -11,4 +11,4 @@ List<Map> superUserdrawerItems = [
   {"icon": Icons.notifications, "title": "Yeni Bildirim Oluştur"},
 ];
 
-Color primaryGreen = Colors.grey.shade800;
+Color primaryGrey = Colors.grey.shade800;

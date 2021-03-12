@@ -30,6 +30,41 @@ class _ScanState extends State<ScanScreen> {
     ..removeWhere((e) => e == BarcodeFormat.unknown);
   List<BarcodeFormat> selectedFormats = [..._possibleFormats];
 
+  @override
+  Widget build(BuildContext context) {
+    UserModel _userModel = Provider.of<UserModel>(context);
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Yoklama'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: RaisedButton(
+                    color: Colors.blue,
+                    textColor: Colors.white,
+                    splashColor: Colors.blueGrey,
+                    onPressed: () {
+                      _scanQR(context, _userModel);
+                    },
+                    child: const Text('START CAMERA SCAN')),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Text(
+                  result,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+        ));
+  }
+
   Future<void> _scanQR(BuildContext context, UserModel userModel) async {
     try {
       var options = ScanOptions(
@@ -71,30 +106,31 @@ class _ScanState extends State<ScanScreen> {
       });
     }
 
-    setState(() {
-      result = "Yoklama alınıyor...";
-    });
-
     String userName = userModel.user.userName + " " + userModel.user.lastName;
     try {
-      bool sonuc =
-          await userModel.yoklamaAl(userName, userModel.user.userID, barcode);
-      if (sonuc == true || sonuc == null) {
-        PlatformDuyarliAlertDialog(
-          baslik: "Yoklama Alındı",
-          icerik: "Yoklama başarılı bir şekilde alındı",
-          anaButonYazisi: "Tamam",
-        ).goster(context);
+      if (barcode.length != 0) {
         setState(() {
-          result = "Yoklama Alındı";
+          result = "Yoklama alınıyor...";
         });
-      } else {
-        PlatformDuyarliAlertDialog(
-          baslik: "Yoklama Alınamadı 😞",
-          icerik: "Yoklama alınırken bir sorun oluştu.\n" +
-              "İnternet bağlantınızı kontrol edin.",
-          anaButonYazisi: "Tamam",
-        ).goster(context);
+        bool sonuc =
+            await userModel.yoklamaAl(userName, userModel.user.userID, barcode);
+        if (sonuc == true || sonuc == null) {
+          PlatformDuyarliAlertDialog(
+            baslik: "Yoklama Alındı",
+            icerik: "Yoklama başarılı bir şekilde alındı",
+            anaButonYazisi: "Tamam",
+          ).goster(context);
+          setState(() {
+            result = "Yoklama Alındı";
+          });
+        } else {
+          PlatformDuyarliAlertDialog(
+            baslik: "Yoklama Alınamadı 😞",
+            icerik: "Yoklama alınırken bir sorun oluştu.\n" +
+                "İnternet bağlantınızı kontrol edin.",
+            anaButonYazisi: "Tamam",
+          ).goster(context);
+        }
       }
     } on PlatformException catch (e) {
       PlatformDuyarliAlertDialog(
@@ -106,40 +142,5 @@ class _ScanState extends State<ScanScreen> {
         result = "Yoklama Alma HATA";
       });
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    UserModel _userModel = Provider.of<UserModel>(context);
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Yoklama'),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: RaisedButton(
-                    color: Colors.blue,
-                    textColor: Colors.white,
-                    splashColor: Colors.blueGrey,
-                    onPressed: () {
-                      _scanQR(context, _userModel);
-                    },
-                    child: const Text('START CAMERA SCAN')),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Text(
-                  result,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-          ),
-        ));
   }
 }

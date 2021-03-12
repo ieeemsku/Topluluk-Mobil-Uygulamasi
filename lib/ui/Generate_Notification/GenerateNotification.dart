@@ -86,6 +86,13 @@ class Notice extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20)),
                     ),
                     key: key1,
+                    validator: (String value) {
+                      if (value.length == 0) {
+                        return "Bildirim Başlığı belirtmelisiniz";
+                      } else {
+                        return null;
+                      }
+                    },
                     onSaved: (String value) => title = value,
                   ),
                   SizedBox(
@@ -126,6 +133,13 @@ class Notice extends StatelessWidget {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20)),
                     ),
+                    validator: (String value) {
+                      if (value.length == 0) {
+                        return "Bilidirim Uzun Mesaj belirtilmelidir";
+                      } else {
+                        return null;
+                      }
+                    },
                     onSaved: (String value) => bigText = value,
                   ),
                 ],
@@ -194,29 +208,37 @@ class Notice extends StatelessWidget {
   }
 
   _bildirimOlustur(UserModel userModel, BuildContext context) async {
-    PlatformDuyarliAlertDialog(
-      baslik: "Bildirim Oluşturuluyor 😎",
-      icerik: "Bildirim oluşturuluncaya kadar lütfen bekleyiniz.",
-      anaButonYazisi: "Tamam",
-    ).goster(context);
-
-    formKey.currentState.save();
-
-    bool sonuc = await userModel.generateNotification(title, message, bigText);
-
-    if (sonuc == true || sonuc == null) {
+    if (formKey.currentState.validate()) {
+      formKey.currentState.save();
       PlatformDuyarliAlertDialog(
-        baslik: "Bildirim Oluşturuldu 👍",
-        icerik: "Bildirim başarıyla oluşturuldu.\n" +
-            "Bildirim kullanıcıların internet hızı ve Stuvent'ın güncelliğine göre bir "
-                "süre sonra gönderilecektir.",
+        baslik: "Bildirim Oluşturuluyor 😎",
+        icerik: "Bildirim oluşturuluncaya kadar lütfen bekleyiniz.",
         anaButonYazisi: "Tamam",
       ).goster(context);
+
+      bool sonuc =
+          await userModel.generateNotification(title, message, bigText);
+
+      if (sonuc == true || sonuc == null) {
+        PlatformDuyarliAlertDialog(
+          baslik: "Bildirim Oluşturuldu 👍",
+          icerik: "Bildirim başarıyla oluşturuldu.\n" +
+              "Bildirim kullanıcıların internet hızı ve Stuvent'ın güncelliğine göre bir "
+                  "süre sonra gönderilecektir.",
+          anaButonYazisi: "Tamam",
+        ).goster(context);
+      } else {
+        PlatformDuyarliAlertDialog(
+          baslik: "Bildirim Oluşturulamadı 😕",
+          icerik: "Bildirim oluşturulurken bir sorun oluştu.\n" +
+              "İnternet bağlantınızı kontrol ediniz",
+          anaButonYazisi: "Tamam",
+        ).goster(context);
+      }
     } else {
       PlatformDuyarliAlertDialog(
-        baslik: "Bildirim Oluşturulamadı 😕",
-        icerik: "Bildirim oluşturulurken bir sorun oluştu.\n" +
-            "İnternet bağlantınızı kontrol ediniz",
+        baslik: "Değerleri Doğru Giriniz",
+        icerik: "Lütfen istenilen değerleri tam ve doğru giriniz",
         anaButonYazisi: "Tamam",
       ).goster(context);
     }

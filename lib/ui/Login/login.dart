@@ -168,7 +168,7 @@ class LoginPage extends StatelessWidget {
                 GestureDetector(
                   child: Container(
                       height: size.height * 0.07,
-                      width: size.width * 0.25,
+                      width: size.width * 0.20,
                       decoration: BoxDecoration(
                           gradient: indigoButton,
                           borderRadius: BorderRadius.circular(5)),

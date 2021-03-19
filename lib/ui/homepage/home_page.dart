@@ -63,70 +63,85 @@ class _HomePageState extends State<HomePage>
     ekranGenisligi = size.width;
     ekranYuksekligi = size.height;
 
-    return ChangeNotifierProvider<AppState>(
-      create: (_) => AppState(),
-      child: SafeArea(
-        child: Scaffold(
-          body: Stack(
-            children: <Widget>[
-              menuOlustur(context),
-              AnimatedPositioned(
-                top: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
-                bottom: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
-                left: menuAcikMi ? 0.6 * ekranGenisligi : 0,
-                right: menuAcikMi ? -0.55 * ekranGenisligi : 0,
-                duration: _duration,
-                child: RefreshIndicator(
-                  onRefresh: read,
-                  child: Container(
-                    decoration: BoxDecoration(gradient: homePageBg),
-                    child: Scaffold(
-                      resizeToAvoidBottomInset: true,
-                      backgroundColor: Colors.transparent,
-                      body: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 30,
-                            ),
-                            header(),
-                            SizedBox(
-                              height: 25,
-                            ),
-                            komiteHeader(),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            komiteler(size, context),
-                            cevreText(),
-                            SizedBox(
-                              height: 25,
-                            ),
-                            FutureBuilder<void>(
-                              future: read(),
-                              builder: (context, sonuc) => Consumer<AppState>(
-                                builder: (context, appState, _) => Container(
-                                    child: komitelerList.length == 0
-                                        ? MerkezWidget(
-                                            children: <Widget>[
-                                              CircularProgressIndicator()
-                                            ],
-                                          )
-                                        : etkinlikler(context, appState)),
+    return WillPopScope(
+      onWillPop: () => _cikis(),
+      child: ChangeNotifierProvider<AppState>(
+        create: (_) => AppState(),
+        child: SafeArea(
+          child: Scaffold(
+            body: Stack(
+              children: <Widget>[
+                menuOlustur(context),
+                AnimatedPositioned(
+                  top: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
+                  bottom: menuAcikMi ? 0.16 * ekranYuksekligi : 0,
+                  left: menuAcikMi ? 0.6 * ekranGenisligi : 0,
+                  right: menuAcikMi ? -0.55 * ekranGenisligi : 0,
+                  duration: _duration,
+                  child: RefreshIndicator(
+                    onRefresh: read,
+                    child: Container(
+                      decoration: BoxDecoration(gradient: homePageBg),
+                      child: Scaffold(
+                        resizeToAvoidBottomInset: true,
+                        backgroundColor: Colors.transparent,
+                        body: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 30,
                               ),
-                            )
-                          ],
+                              header(),
+                              SizedBox(
+                                height: 25,
+                              ),
+                              komiteHeader(),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              komiteler(size, context),
+                              cevreText(),
+                              SizedBox(
+                                height: 25,
+                              ),
+                              FutureBuilder<void>(
+                                future: read(),
+                                builder: (context, sonuc) => Consumer<AppState>(
+                                  builder: (context, appState, _) => Container(
+                                      child: komitelerList.length == 0
+                                          ? MerkezWidget(
+                                              children: <Widget>[
+                                                CircularProgressIndicator()
+                                              ],
+                                            )
+                                          : etkinlikler(context, appState)),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Future<bool> _cikis() async {
+    if (menuAcikMi) {
+      setState(() {
+        _controller.reverse();
+        menuAcikMi = !menuAcikMi;
+      });
+      return Future.value(false);
+    } else {
+      return Future.value(true);
+    }
   }
 
   Widget menuOlustur(BuildContext context) {

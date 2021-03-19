@@ -237,13 +237,12 @@ class ChangePassword extends StatelessWidget {
   }
 
   Future<void> _updatePassword(BuildContext context) async {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text("Şifreniz Güncelleniyor..."),
-      duration: Duration(seconds: 3),
-    ));
-
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text("Şifreniz Güncelleniyor..."),
+        duration: Duration(seconds: 3),
+      ));
 
       UserModel _userModel = Provider.of<UserModel>(context, listen: false);
       String userMail = _userModel.user.email;
@@ -296,6 +295,11 @@ class ChangePassword extends StatelessWidget {
           anaButonYazisi: "Tamam",
         ).goster(context);
       }
+    } else {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text("Lütfen Değerleri Doğru Giriniz..."),
+        duration: Duration(seconds: 3),
+      ));
     }
   }
 }

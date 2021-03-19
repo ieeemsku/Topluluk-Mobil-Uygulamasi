@@ -84,7 +84,7 @@ class _Create_EventState extends State<Create_Event> {
             right: size.width * 0.1,
             left: size.width * 0.1,
             child: Container(
-              height: size.height * 0.6,
+              height: size.height * 0.7,
               width: size.width * 0.6,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -124,6 +124,8 @@ class _Create_EventState extends State<Create_Event> {
                           validator: (String value) {
                             if (etkinlikler.contains(value)) {
                               return "Bu etkinlik bulunmaktadır";
+                            } else if (value.length == 0) {
+                              return "Etkinlik adı belirtmelisiniz";
                             } else
                               return null;
                           },
@@ -145,6 +147,13 @@ class _Create_EventState extends State<Create_Event> {
                                 color: Colors.grey,
                                 fontSize: 17),
                           ),
+                          validator: (String value) {
+                            if (value.length == 0) {
+                              return "Etkinlik Konumu belirtmelisiniz";
+                            } else {
+                              return null;
+                            }
+                          },
                           onSaved: (String value) => location = value,
                         ),
                         SizedBox(
@@ -181,7 +190,7 @@ class _Create_EventState extends State<Create_Event> {
             ),
           ),
           Positioned(
-              top: size.height * 0.78,
+              top: size.height * 0.85,
               left: size.width * 0.333,
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,

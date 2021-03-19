@@ -4,6 +4,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
 import 'package:stuventmobil/model/userC.dart';
+import 'package:stuventmobil/ui/Profil/update_password_page.dart';
 import 'package:stuventmobil/viewmodel/user_model.dart';
 
 import 'file:///C:/Users/HAKKICAN/AndroidStudioProjects/Topluluk-Mobil-Uygulamasi/lib/ui/Profil/take_info_page.dart';
@@ -192,15 +193,23 @@ class _ProfilState extends State<Profil> {
   }
 
   buildPassword() {
-    return Container(
-      height: 50,
-      width: 220,
-      decoration: BoxDecoration(
-        boxShadow: [BoxShadow(blurRadius: 10, color: Colors.grey)],
-        color: Color.fromRGBO(57, 28, 178, 1),
-        borderRadius: BorderRadius.circular(15),
+    return GestureDetector(
+      child: Container(
+        height: 50,
+        width: 220,
+        decoration: BoxDecoration(
+          boxShadow: [BoxShadow(blurRadius: 10, color: Colors.grey)],
+          color: Color.fromRGBO(57, 28, 178, 1),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Center(child: Text("Şifremi Güncelle", style: miniHeader2)),
       ),
-      child: Center(child: Text("Şifremi Güncelle", style: miniHeader2)),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChangePassword()),
+        );
+      },
     );
   }
 
@@ -214,9 +223,14 @@ class _ProfilState extends State<Profil> {
               onPressed: () {
                 Navigator.pop(context);
               }),
-          Text(
-            "Geri",
-            style: textStyle4,
+          GestureDetector(
+            child: Text(
+              "Geri",
+              style: textStyle4,
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
           ),
           SizedBox(
             width: 150,

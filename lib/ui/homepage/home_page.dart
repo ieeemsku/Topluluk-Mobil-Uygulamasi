@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuventmobil/app_state.dart';
+import 'package:stuventmobil/common_widget/merkez_widget.dart';
 import 'package:stuventmobil/common_widget/platform_duyarli_alert_dialog.dart';
 import 'package:stuventmobil/configuration.dart';
 import 'package:stuventmobil/model/event.dart';
@@ -105,9 +106,15 @@ class _HomePageState extends State<HomePage>
                               future: read(),
                               builder: (context, sonuc) => Consumer<AppState>(
                                 builder: (context, appState, _) => Container(
-                                    child: etkinlikler(context, appState)),
+                                    child: komitelerList.length == 0
+                                        ? MerkezWidget(
+                                            children: <Widget>[
+                                              CircularProgressIndicator()
+                                            ],
+                                          )
+                                        : etkinlikler(context, appState)),
                               ),
-                            ),
+                            )
                           ],
                         ),
                       ),
@@ -369,8 +376,9 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget etkinlikler(context, AppState appState) {
+    int eventLenght = komitelerList[appState.selectedCategoryId];
     return Container(
-      height: komitelerList[appState.selectedCategoryId] * 350.0,
+      height: eventLenght * 350.0,
       width: 320,
       child: Column(
         children: [

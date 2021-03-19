@@ -91,7 +91,7 @@ class LoginPage extends StatelessWidget {
 
   Widget buildFormfield(UserModel userModel, BuildContext context) {
     return Container(
-      height: size.height * 0.40,
+      height: size.height * 0.45,
       width: size.width * 0.86,
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
@@ -168,7 +168,7 @@ class LoginPage extends StatelessWidget {
                 GestureDetector(
                   child: Container(
                       height: size.height * 0.07,
-                      width: size.width * 0.25,
+                      width: size.width * 0.20,
                       decoration: BoxDecoration(
                           gradient: indigoButton,
                           borderRadius: BorderRadius.circular(5)),

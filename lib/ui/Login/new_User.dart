@@ -271,14 +271,13 @@ class _CreateAccState extends State<CreateAcc> {
   }
 
   Future<void> _generateNewUser(BuildContext context) async {
-    PlatformDuyarliAlertDialog(
-      baslik: "Üye Kayıt Ediliyor...",
-      icerik: "Üye kayıt edilirken lütfen bekleyiniz",
-      anaButonYazisi: "Tamam",
-    ).goster(context);
-
     if (CreateAcc.formKeyy.currentState.validate()) {
       CreateAcc.formKeyy.currentState.save();
+      PlatformDuyarliAlertDialog(
+        baslik: "Üye Kayıt Ediliyor...",
+        icerik: "Üye kayıt edilirken lütfen bekleyiniz",
+        anaButonYazisi: "Tamam",
+      ).goster(context);
 
       final _userModel = Provider.of<UserModel>(context, listen: false);
       try {
@@ -311,6 +310,12 @@ class _CreateAccState extends State<CreateAcc> {
           anaButonYazisi: "Tamam",
         ).goster(context);
       }
+    } else {
+      PlatformDuyarliAlertDialog(
+        baslik: "Değerleri Doğru Giriniz",
+        icerik: "Lütfen istenilen değerleri tam ve doğru giriniz",
+        anaButonYazisi: "Tamam",
+      ).goster(context);
     }
   }
 }

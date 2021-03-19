@@ -25,7 +25,7 @@ class Event {
       @required this.participants});
 }
 
-final List<Event> events = [];
+List<Event> events = [];
 final List<int> komitelerList = [];
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -54,7 +54,7 @@ Future<void> read() async {
       docMap = data["Dosyalar"];
       katilimcilar = data["Katilimcilar"];
 
-      Event event = new Event(
+      Event event = Event(
           title: ad,
           location: konum,
           categoryIds: categoryList,
@@ -94,4 +94,5 @@ Future<void> read() async {
   komitelerList.add(ras);
   komitelerList.add(ea);
   komitelerList.add(wie);
+  events = events.reversed.toList();
 }

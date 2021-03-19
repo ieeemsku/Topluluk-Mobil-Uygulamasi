@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage>
   Animation<Offset> _menuOffsetAnimation;
   final Duration _duration = Duration(milliseconds: 300);
 
-  String name = "";
+  String name = "", bolum = "";
 
   @override
   void initState() {
@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage>
                           ),
                         ),
                         Text(
-                          "Bölüm",
+                          bolum,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w300,
@@ -416,6 +416,7 @@ class _HomePageState extends State<HomePage>
           ? "${user.userName}"
           : "${user.userName} ${user.lastName}";
       superUser = user.superUser;
+      bolum = user.bolum;
     });
   }
 

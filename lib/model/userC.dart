@@ -36,10 +36,10 @@ class UserC {
       'katilacagimEtkinlikler': katilacagimEtkinlikler,
       'SuperUser': superUser,
       "UserID": userID,
-      "Bölüm": bolum,
-      "İlgiAlani": ilgiAlani,
-      "Hobi": hobi,
-      "Komite": komite,
+      "Bölüm": bolum != null ? bolum : "-",
+      "İlgiAlani": ilgiAlani != null ? ilgiAlani : "-",
+      "Hobi": hobi != null ? hobi : "-",
+      "Komite": komite != null ? komite : "-",
     };
   }
 

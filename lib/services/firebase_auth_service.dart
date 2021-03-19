@@ -83,10 +83,10 @@ class FirebaseAuthService implements AuthBase {
         superUser: superUser,
         katildigimEtkinlikler: katildigimEtkinlikler,
         katilacagimEtkinlikler: katilacagimEtkinlikler,
-        bolum: "",
-        ilgiAlani: "",
-        hobi: "",
-        komite: "");
+        bolum: "-",
+        ilgiAlani: "-",
+        hobi: "-",
+        komite: "-");
   }
 
   @override

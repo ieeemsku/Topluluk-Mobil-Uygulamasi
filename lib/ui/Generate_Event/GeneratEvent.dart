@@ -32,12 +32,15 @@ class _Create_EventState extends State<Create_Event> {
 
   bool _eventInProgress = false;
 
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
+
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     UserModel _userModel = Provider.of<UserModel>(context);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
+        key: _scaffoldKey,
         body: Column(
           children: [
             Theme(
@@ -53,6 +56,7 @@ class _Create_EventState extends State<Create_Event> {
     return Container(
       height: size.height * 0.8,
       child: Stack(
+        overflow: Overflow.visible,
         children: [
           Container(
             width: size.width,
@@ -118,7 +122,7 @@ class _Create_EventState extends State<Create_Event> {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey,
                                 fontSize: 17),
-                            hintText: "Etkinlik",
+                            hintText: "Etkinlik Adı",
                           ),
                           key: Create_Event.key1,
                           validator: (String value) {
@@ -189,38 +193,7 @@ class _Create_EventState extends State<Create_Event> {
               ),
             ),
           ),
-          Positioned(
-              top: size.height * 0.85,
-              left: size.width * 0.333,
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: Container(
-                  child: Center(
-                      child: Text(
-                    "Resim Ekle",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  )),
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.bottomRight,
-                          end: Alignment.bottomLeft,
-                          stops: [
-                            0.1,
-                            1.0,
-                          ],
-                          colors: [
-                            Color.fromRGBO(30, 227, 167, 1),
-                            Color.fromRGBO(220, 247, 239, 1),
-                          ]),
-                      borderRadius: butonBorder),
-                  height: size.height * 0.09,
-                  width: size.width * 0.3,
-                ),
-                onTap: _galeriResimUpload,
-              ))
         ],
-        overflow: Overflow.visible,
       ),
     );
   }
@@ -349,12 +322,19 @@ class _Create_EventState extends State<Create_Event> {
   }
 
   _galeriResimUpload() async {
-    final picker = ImagePicker();
-    var pickedFile = await picker.getImage(source: ImageSource.gallery);
+    try {
+      final picker = ImagePicker();
+      var pickedFile = await picker.getImage(source: ImageSource.gallery);
 
-    setState(() {
-      _secilenResim = File(pickedFile.path);
-    });
+      setState(() {
+        _secilenResim = File(pickedFile.path);
+      });
+    } catch (e) {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text("Resim Seçilemedi 😕"),
+        duration: Duration(seconds: 2),
+      ));
+    }
   }
 
   _veriEkle(UserModel userModel) async {

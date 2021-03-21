@@ -109,7 +109,9 @@ class _ProfilState extends State<Profil> {
                     children: [
                       Text(
                         mail,
-                        style: headerText2,
+                        style: mail.length < 20
+                            ? headerText2
+                            : headerText2.copyWith(fontSize: 20),
                       )
                     ],
                   )

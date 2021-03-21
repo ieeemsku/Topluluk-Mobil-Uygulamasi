@@ -45,6 +45,7 @@ class FirestoreDBService implements DBBase {
         .set(map)
         .catchError((onError) {
       print("db setData hata: " + onError.toString());
+      return false;
     });
     return true;
   }

@@ -294,11 +294,11 @@ const veteriner = ["Veterinerlik"];
 const mimarlik = ["Mimarlık", "Şehir ve Bölge Planlama"];
 
 const muhendislik = [
-  "Bilgisayar Mühendisliği",
-  "Elektrik-Elektronik Mühendisliği",
-  "İnşaat Mühendisliği",
-  "Maden Mühendisliği",
-  "Metalürji ve Malzeme Mühendisliği"
+  "Bilgisayar Müh.",
+  "Elektrik-Elektronik Müh.",
+  "İnşaat Müh.",
+  "Maden Müh.",
+  "Metalürji ve Malzeme Müh."
 ];
 
 const saglik = [

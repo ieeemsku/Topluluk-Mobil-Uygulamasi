@@ -284,6 +284,7 @@ class _CreateAccState extends State<CreateAcc> {
         UserC _user = await _userModel.createUserWithEmailandPassword(
             name, lastName, mail, password, false);
         if (_user != null) {
+          Navigator.pop(context);
           var sonuc = await PlatformDuyarliAlertDialog(
             baslik: "Kaydınız Başarıyla Gerçekleştirildi 👍",
             icerik: "Biraz sonra gösterilecek tanıtımdan sonra giriş ekranına " +
@@ -296,6 +297,7 @@ class _CreateAccState extends State<CreateAcc> {
                 context, MaterialPageRoute(builder: (context) => Intro()));
           }
         } else {
+          Navigator.pop(context);
           PlatformDuyarliAlertDialog(
             baslik: "Üye Kayıt Edilirken HATA 😕",
             icerik: "Üye kayıt edilirken bir sorun oluştu.\n" +
@@ -304,6 +306,7 @@ class _CreateAccState extends State<CreateAcc> {
           ).goster(context);
         }
       } catch (e) {
+        Navigator.pop(context);
         PlatformDuyarliAlertDialog(
           baslik: "Kullanıcı Oluşturma HATA 😕",
           icerik: Exceptions.goster(e.code),

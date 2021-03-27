@@ -35,6 +35,7 @@ class _TakeInfoState extends State<TakeInfo> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel _userModel = Provider.of<UserModel>(context);
     return Container(
       decoration: BoxDecoration(gradient: homePageBg),
       child: Scaffold(
@@ -47,7 +48,9 @@ class _TakeInfoState extends State<TakeInfo> {
             width: 70.0,
             child: FittedBox(
               child: FloatingActionButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await save(context, _userModel);
+                },
                 child: Icon(
                   Icons.save,
                   color: Colors.grey.shade800,
@@ -334,10 +337,10 @@ class _TakeInfoState extends State<TakeInfo> {
     return bolumlerList;
   }
 
-  Future<void> save(BuildContext context) async {
+  Future<void> save(BuildContext context, UserModel userModel) async {
     try {
       if (secilenBolum == "Bölüm Seçiniz" || komite == "Komite Seçiniz") {
-        PlatformDuyarliAlertDialog(
+        await PlatformDuyarliAlertDialog(
           baslik: "Bölüm ve Komite Seçmelisiniz",
           icerik: "Bölüm veya Komiteyi doğru seçmediniz.\n" +
               "Lütfen doğru bir bölüm ve komite seçiniz",
@@ -345,17 +348,17 @@ class _TakeInfoState extends State<TakeInfo> {
         ).goster(context);
       } else {
         TakeInfo.formKey.currentState.save();
-        final _userModel = Provider.of<UserModel>(context, listen: false);
-        bool sonuc = await _userModel.setProfil(
-            _userModel.user.userID, secilenBolum, ilgiAlani, hobi, komite);
+        bool sonuc = await userModel.setProfil(
+            userModel.user.userID, secilenBolum, ilgiAlani, hobi, komite);
+        print("sonuc: " + sonuc.toString());
         if (sonuc == true || sonuc == null) {
-          PlatformDuyarliAlertDialog(
+          await PlatformDuyarliAlertDialog(
             baslik: "Profil Bilgileriniz Güncellendi",
             icerik: "Profil bilgileriniz başarıyla güncellendi",
             anaButonYazisi: "Tamam",
           ).goster(context);
         } else {
-          PlatformDuyarliAlertDialog(
+          await PlatformDuyarliAlertDialog(
             baslik: "Profil Bilgileriniz Güncellenemedi 😕",
             icerik: "Profil bilgileriniz güncellenirken bir sorun oluştu.\n" +
                 "İnternet bağlantınızı kontrol edin.",
@@ -365,7 +368,7 @@ class _TakeInfoState extends State<TakeInfo> {
         Navigator.pop(context);
       }
     } on PlatformException catch (e) {
-      PlatformDuyarliAlertDialog(
+      await PlatformDuyarliAlertDialog(
         baslik: "Profil Bilgileriniz Güncelleme HATA",
         icerik: Exceptions.goster(e.code),
         anaButonYazisi: "Tamam",

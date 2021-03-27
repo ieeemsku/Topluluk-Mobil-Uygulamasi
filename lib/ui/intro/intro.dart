@@ -30,7 +30,7 @@ class _IntroState extends State<Intro> {
             "teknik kuruluşudur.",
             textAlign: TextAlign.center,
             style: bodyTextStyle),
-        iconAssetPath: path + 'CS_90x.png'),
+        iconAssetPath: path + 'cs.png'),
     PageModel(
         color: color,
         heroAssetPath: path + 'EA_420x.png',
@@ -46,7 +46,7 @@ class _IntroState extends State<Intro> {
             "kararı alınmış bir IEEE komitesidir.",
             textAlign: TextAlign.center,
             style: bodyTextStyle),
-        iconAssetPath: path + 'EA_90x.png'),
+        iconAssetPath: "assets/logo/beyazLogo/ea_w.png"),
     PageModel(
         color: color,
         heroAssetPath: path + 'CSoc_420x.png',
@@ -61,7 +61,7 @@ class _IntroState extends State<Intro> {
             "gelişimi sağlama, mesleğe teşviki arttırmayı ilke edinmiş telekomünikasyon mühendisleri topluluğudur.",
             textAlign: TextAlign.center,
             style: bodyTextStyle),
-        iconAssetPath: path + 'CSoc_90x.png'),
+        iconAssetPath: path + 'comsoc.png'),
     PageModel(
         color: color,
         heroAssetPath: path + 'PES_420x.png',
@@ -77,7 +77,7 @@ class _IntroState extends State<Intro> {
             "plan yapan ve çalışan bir topluluktur.",
             textAlign: TextAlign.center,
             style: bodyTextStyle),
-        iconAssetPath: path + 'PES_90x.png'),
+        iconAssetPath: path + 'pes.png'),
     PageModel(
         color: color,
         heroAssetPath: path + 'WIE _420x.png',
@@ -90,7 +90,7 @@ class _IntroState extends State<Intro> {
             "olmasını sağlamaya çalışıyor.",
             textAlign: TextAlign.center,
             style: bodyTextStyle),
-        iconAssetPath: path + 'WIE_90.png'),
+        iconAssetPath: path + 'wie.png'),
     PageModel(
         color: color,
         heroAssetPath: path + 'RAS_420x.png',
@@ -107,7 +107,7 @@ class _IntroState extends State<Intro> {
             "ile uyumlu olarak sürdürülmesi için çaba göstermekteyiz.",
             textAlign: TextAlign.center,
             style: bodyTextStyle),
-        iconAssetPath: path + 'RAS_90.png')
+        iconAssetPath: path + 'ras.png')
   ];
   @override
   Widget build(BuildContext context) {
